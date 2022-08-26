@@ -1,0 +1,114 @@
+window_param
+{
+	vec3d -- resolution
+}
+
+pos_vec
+{
+	int -- x
+	int -- y
+	int -- z
+}
+
+texture
+{
+	string -- mesh_file
+	irr_texture* -- texture_ptr
+}
+
+game_mesh
+{
+	int -- mesh_type
+	string -- mesh_file
+	void* -- irr_texture
+	
+	bool -- use_ext_texture
+	texture -- ext_texture
+}
+
+script
+{
+	int -- script_type
+	void* -- script_obj
+	int -- return_value
+}
+
+actor
+{
+	pos_vec -- init_pos
+	pos_vec -- pos
+	
+	game_mesh -- actor_mesh
+	
+	bool -- visible_flag
+	
+	bool -- active_flag
+	
+	script -- actor_ctrl_script
+	
+	bool collide_flag
+	bool physics_flag
+	
+	//physics attributes here
+}
+
+light
+{
+	int -- light_type
+	
+	pos_vec -- pos
+	
+	//atributes here
+}
+
+camera
+{
+	int -- camera_type
+	
+	pos_vec -- pos
+	
+	//attributes here
+}
+
+effect
+{
+	int -- effect_type
+	
+	pos_vec -- pos
+	
+	//attributes here
+}
+
+event
+{
+	int event_type
+	
+	script -- trigger_expression
+	script -- trigger_action
+}
+
+stage
+{
+	int -- id
+	string -- stage_name
+	
+	script -- stage_run
+	
+	vector<script> -- stage_scripts
+	
+	vector<actor> -- stage_actor
+	vector<light> -- stage_light
+	vector<camera> -- stage_camera
+	vector<effect> -- stage_effect
+	vector<event> -- stage_event
+}
+
+
+
+Game Struct
+{
+	string -- game_name
+	window_param -- game_window
+	
+	script -- game_run
+}
