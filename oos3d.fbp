@@ -78,7 +78,7 @@
                 <property name="window_extra_style"></property>
                 <property name="window_name"></property>
                 <property name="window_style"></property>
-                <object class="wxMenu" expanded="0">
+                <object class="wxMenu" expanded="1">
                     <property name="label">File</property>
                     <property name="name">m_file_menu</property>
                     <property name="permission">protected</property>
@@ -143,7 +143,7 @@
                         <event name="OnMenuSelection">OnExitMenuSelect</event>
                     </object>
                 </object>
-                <object class="wxMenu" expanded="0">
+                <object class="wxMenu" expanded="1">
                     <property name="label">Edit</property>
                     <property name="name">m_edit_menu</property>
                     <property name="permission">protected</property>
@@ -242,6 +242,7 @@
                         <property name="permission">none</property>
                         <property name="shortcut"></property>
                         <property name="unchecked_bitmap"></property>
+                        <event name="OnMenuSelection">OnNewStageMenuSelect</event>
                     </object>
                     <object class="wxMenuItem" expanded="0">
                         <property name="bitmap"></property>
@@ -255,6 +256,7 @@
                         <property name="permission">none</property>
                         <property name="shortcut"></property>
                         <property name="unchecked_bitmap"></property>
+                        <event name="OnMenuSelection">OnNewScriptMenuSelect</event>
                     </object>
                     <object class="separator" expanded="0">
                         <property name="name">m_separator2</property>
@@ -272,6 +274,7 @@
                         <property name="permission">none</property>
                         <property name="shortcut"></property>
                         <property name="unchecked_bitmap"></property>
+                        <event name="OnMenuSelection">OnImportMeshMenuSelect</event>
                     </object>
                     <object class="wxMenuItem" expanded="0">
                         <property name="bitmap"></property>
@@ -285,6 +288,7 @@
                         <property name="permission">none</property>
                         <property name="shortcut"></property>
                         <property name="unchecked_bitmap"></property>
+                        <event name="OnMenuSelection">OnImportAudioMenuSelect</event>
                     </object>
                     <object class="wxMenuItem" expanded="0">
                         <property name="bitmap"></property>
@@ -298,6 +302,7 @@
                         <property name="permission">none</property>
                         <property name="shortcut"></property>
                         <property name="unchecked_bitmap"></property>
+                        <event name="OnMenuSelection">OnImportTextureMenuSelect</event>
                     </object>
                     <object class="wxMenuItem" expanded="0">
                         <property name="bitmap"></property>
@@ -311,6 +316,7 @@
                         <property name="permission">none</property>
                         <property name="shortcut"></property>
                         <property name="unchecked_bitmap"></property>
+                        <event name="OnMenuSelection">OnImportVideoMenuSelect</event>
                     </object>
                     <object class="wxMenuItem" expanded="0">
                         <property name="bitmap"></property>
@@ -324,6 +330,7 @@
                         <property name="permission">none</property>
                         <property name="shortcut"></property>
                         <property name="unchecked_bitmap"></property>
+                        <event name="OnMenuSelection">OnImportScriptMenuSelect</event>
                     </object>
                     <object class="wxMenuItem" expanded="0">
                         <property name="bitmap"></property>
@@ -337,6 +344,7 @@
                         <property name="permission">none</property>
                         <property name="shortcut"></property>
                         <property name="unchecked_bitmap"></property>
+                        <event name="OnMenuSelection">OnImportDataMenuSelect</event>
                     </object>
                     <object class="separator" expanded="0">
                         <property name="name">m_separator5</property>
@@ -354,9 +362,10 @@
                         <property name="permission">none</property>
                         <property name="shortcut"></property>
                         <property name="unchecked_bitmap"></property>
+                        <event name="OnMenuSelection">OnProjectSettingsMenuSelect</event>
                     </object>
                 </object>
-                <object class="wxMenu" expanded="0">
+                <object class="wxMenu" expanded="1">
                     <property name="label">Build</property>
                     <property name="name">m_build_menu</property>
                     <property name="permission">protected</property>
@@ -372,6 +381,7 @@
                         <property name="permission">none</property>
                         <property name="shortcut"></property>
                         <property name="unchecked_bitmap"></property>
+                        <event name="OnMenuSelection">OnRunGameMenuSelect</event>
                     </object>
                     <object class="wxMenuItem" expanded="0">
                         <property name="bitmap"></property>
@@ -385,6 +395,25 @@
                         <property name="permission">none</property>
                         <property name="shortcut"></property>
                         <property name="unchecked_bitmap"></property>
+                        <event name="OnMenuSelection">OnRunStageMenuSelect</event>
+                    </object>
+                    <object class="separator" expanded="1">
+                        <property name="name">m_separator7</property>
+                        <property name="permission">none</property>
+                    </object>
+                    <object class="wxMenuItem" expanded="1">
+                        <property name="bitmap"></property>
+                        <property name="checked">0</property>
+                        <property name="enabled">1</property>
+                        <property name="help"></property>
+                        <property name="id">wxID_ANY</property>
+                        <property name="kind">wxITEM_NORMAL</property>
+                        <property name="label">Stop Execution</property>
+                        <property name="name">m_abortRun_menuItem</property>
+                        <property name="permission">none</property>
+                        <property name="shortcut"></property>
+                        <property name="unchecked_bitmap"></property>
+                        <event name="OnMenuSelection">OnAbortMenuSelect</event>
                     </object>
                     <object class="separator" expanded="0">
                         <property name="name">m_separator4</property>
@@ -402,9 +431,10 @@
                         <property name="permission">none</property>
                         <property name="shortcut"></property>
                         <property name="unchecked_bitmap"></property>
+                        <event name="OnMenuSelection">OnDistributeMenuSelect</event>
                     </object>
                 </object>
-                <object class="wxMenu" expanded="0">
+                <object class="wxMenu" expanded="1">
                     <property name="label">Help</property>
                     <property name="name">m_help_menu</property>
                     <property name="permission">protected</property>
@@ -420,6 +450,7 @@
                         <property name="permission">none</property>
                         <property name="shortcut"></property>
                         <property name="unchecked_bitmap"></property>
+                        <event name="OnMenuSelection">OnAboutMenuSelect</event>
                     </object>
                 </object>
             </object>
@@ -489,6 +520,7 @@
                     <property name="permission">protected</property>
                     <property name="statusbar"></property>
                     <property name="tooltip">New Project</property>
+                    <event name="OnToolClicked">OnNewProjectMenuSelect</event>
                 </object>
                 <object class="tool" expanded="0">
                     <property name="bitmap">Load From Art Provider; wxART_FILE_OPEN; wxART_TOOLBAR</property>
@@ -500,6 +532,7 @@
                     <property name="permission">protected</property>
                     <property name="statusbar"></property>
                     <property name="tooltip">Open Existing Project</property>
+                    <event name="OnToolClicked">OnLoadProjectMenuSelect</event>
                 </object>
                 <object class="tool" expanded="0">
                     <property name="bitmap">Load From Art Provider; wxART_FILE_SAVE; wxART_TOOLBAR</property>
@@ -511,6 +544,7 @@
                     <property name="permission">protected</property>
                     <property name="statusbar"></property>
                     <property name="tooltip">Save Current Project</property>
+                    <event name="OnToolClicked">OnSaveProjectMenuSelect</event>
                 </object>
                 <object class="toolSeparator" expanded="0">
                     <property name="permission">protected</property>
@@ -525,6 +559,7 @@
                     <property name="permission">protected</property>
                     <property name="statusbar"></property>
                     <property name="tooltip">Test Run</property>
+                    <event name="OnToolClicked">OnRunStageMenuSelect</event>
                 </object>
                 <object class="tool" expanded="0">
                     <property name="bitmap">Load From File; gfx/stop.png</property>
@@ -536,6 +571,7 @@
                     <property name="permission">protected</property>
                     <property name="statusbar"></property>
                     <property name="tooltip">Abort Test Run</property>
+                    <event name="OnToolClicked">OnAbortMenuSelect</event>
                 </object>
                 <object class="toolSeparator" expanded="0">
                     <property name="permission">protected</property>
@@ -550,6 +586,7 @@
                     <property name="permission">protected</property>
                     <property name="statusbar"></property>
                     <property name="tooltip"></property>
+                    <event name="OnToolClicked">OnViewToolSelect</event>
                 </object>
                 <object class="tool" expanded="0">
                     <property name="bitmap">Load From File; gfx/cursor.png</property>
@@ -561,6 +598,7 @@
                     <property name="permission">protected</property>
                     <property name="statusbar"></property>
                     <property name="tooltip">Single Select</property>
+                    <event name="OnToolClicked">OnSelectToolSelect</event>
                 </object>
                 <object class="tool" expanded="0">
                     <property name="bitmap">Load From File; gfx/box_select.png</property>
@@ -572,6 +610,7 @@
                     <property name="permission">protected</property>
                     <property name="statusbar"></property>
                     <property name="tooltip">Box Select</property>
+                    <event name="OnToolClicked">OnBoxSelectToolSelect</event>
                 </object>
                 <object class="tool" expanded="0">
                     <property name="bitmap">Load From File; gfx/move.png</property>
@@ -583,6 +622,7 @@
                     <property name="permission">protected</property>
                     <property name="statusbar"></property>
                     <property name="tooltip">Move</property>
+                    <event name="OnToolClicked">OnMoveToolSelect</event>
                 </object>
                 <object class="tool" expanded="0">
                     <property name="bitmap">Load From File; gfx/rotate.png</property>
@@ -594,6 +634,7 @@
                     <property name="permission">protected</property>
                     <property name="statusbar"></property>
                     <property name="tooltip">Rotate</property>
+                    <event name="OnToolClicked">OnRotateToolSelect</event>
                 </object>
                 <object class="tool" expanded="0">
                     <property name="bitmap">Load From File; gfx/scale.png</property>
@@ -605,6 +646,7 @@
                     <property name="permission">protected</property>
                     <property name="statusbar"></property>
                     <property name="tooltip">Scale</property>
+                    <event name="OnToolClicked">OnScaleToolSelect</event>
                 </object>
                 <object class="toolSeparator" expanded="0">
                     <property name="permission">protected</property>
@@ -619,6 +661,7 @@
                     <property name="permission">protected</property>
                     <property name="statusbar"></property>
                     <property name="tooltip"></property>
+                    <event name="OnToolClicked">OnSetTerrainToolSelect</event>
                 </object>
                 <object class="tool" expanded="0">
                     <property name="bitmap">Load From File; gfx/add_actor.png</property>
@@ -630,6 +673,7 @@
                     <property name="permission">protected</property>
                     <property name="statusbar"></property>
                     <property name="tooltip">Add Actor</property>
+                    <event name="OnToolClicked">OnAddActorToolSelect</event>
                 </object>
                 <object class="tool" expanded="0">
                     <property name="bitmap">Load From File; gfx/add_light.png</property>
@@ -641,6 +685,7 @@
                     <property name="permission">protected</property>
                     <property name="statusbar"></property>
                     <property name="tooltip">Add Light</property>
+                    <event name="OnToolClicked">OnAddLightToolSelect</event>
                 </object>
                 <object class="tool" expanded="0">
                     <property name="bitmap">Load From File; gfx/add_camera.png</property>
@@ -652,6 +697,7 @@
                     <property name="permission">protected</property>
                     <property name="statusbar"></property>
                     <property name="tooltip">Add Camera</property>
+                    <event name="OnToolClicked">OnAddCameraToolSelect</event>
                 </object>
                 <object class="tool" expanded="0">
                     <property name="bitmap">Load From File; gfx/effect.png</property>
@@ -663,6 +709,7 @@
                     <property name="permission">protected</property>
                     <property name="statusbar"></property>
                     <property name="tooltip">Add Effect</property>
+                    <event name="OnToolClicked">OnAddEffectToolSelect</event>
                 </object>
                 <object class="tool" expanded="0">
                     <property name="bitmap">Load From File; gfx/event.png</property>
@@ -674,6 +721,7 @@
                     <property name="permission">protected</property>
                     <property name="statusbar"></property>
                     <property name="tooltip">Add Event</property>
+                    <event name="OnToolClicked">OnAddEventToolSelect</event>
                 </object>
             </object>
             <object class="wxBoxSizer" expanded="1">
@@ -1099,6 +1147,7 @@
                                                                                             <property name="window_extra_style"></property>
                                                                                             <property name="window_name"></property>
                                                                                             <property name="window_style"></property>
+                                                                                            <event name="OnTreeItemMenu">OnProjectTreeContextMenu</event>
                                                                                         </object>
                                                                                     </object>
                                                                                 </object>
@@ -1790,6 +1839,7 @@
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
+                                <event name="OnButtonClick">OnCancelButtonClick</event>
                             </object>
                         </object>
                         <object class="sizeritem" expanded="1">
@@ -1863,6 +1913,7 @@
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
+                                <event name="OnButtonClick">OnOKButtonClick</event>
                             </object>
                         </object>
                     </object>
@@ -2324,6 +2375,7 @@
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
+                                <event name="OnButtonClick">OnCancelButtonClick</event>
                             </object>
                         </object>
                         <object class="sizeritem" expanded="1">
@@ -2397,6 +2449,7 @@
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
+                                <event name="OnButtonClick">OnOKButtonClick</event>
                             </object>
                         </object>
                     </object>
@@ -2701,6 +2754,7 @@
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
+                                <event name="OnButtonClick">OnCancelButtonClick</event>
                             </object>
                         </object>
                         <object class="sizeritem" expanded="1">
@@ -2774,6 +2828,7 @@
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
+                                <event name="OnButtonClick">OnOKButtonClick</event>
                             </object>
                         </object>
                     </object>

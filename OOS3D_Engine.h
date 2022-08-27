@@ -95,6 +95,32 @@ class OOS3D_Engine : public wxFrame
 		virtual void OnDeleteMenuSelect( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSelectAllMenuSelect( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnNewStageMenuSelect( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnNewScriptMenuSelect( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnImportMeshMenuSelect( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnImportAudioMenuSelect( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnImportTextureMenuSelect( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnImportVideoMenuSelect( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnImportScriptMenuSelect( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnImportDataMenuSelect( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnProjectSettingsMenuSelect( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnRunGameMenuSelect( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnRunStageMenuSelect( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnAbortMenuSelect( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnDistributeMenuSelect( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnAboutMenuSelect( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnViewToolSelect( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnSelectToolSelect( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnBoxSelectToolSelect( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnMoveToolSelect( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnRotateToolSelect( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnScaleToolSelect( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnSetTerrainToolSelect( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnAddActorToolSelect( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnAddLightToolSelect( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnAddCameraToolSelect( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnAddEffectToolSelect( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnAddEventToolSelect( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnProjectTreeContextMenu( wxTreeEvent& event ) { event.Skip(); }
 
 
 	public:
@@ -130,6 +156,11 @@ class newProjectDialog : public wxDialog
 		wxButton* m_cancel_button;
 		wxButton* m_ok_button;
 
+		// Virtual event handlers, override them in your derived class
+		virtual void OnCancelButtonClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnOKButtonClick( wxCommandEvent& event ) { event.Skip(); }
+
+
 	public:
 
 		newProjectDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Create New Project"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 396,167 ), long style = wxDEFAULT_DIALOG_STYLE );
@@ -153,6 +184,11 @@ class newStageDialog : public wxDialog
 		wxButton* m_cancel_button;
 		wxButton* m_ok_button;
 
+		// Virtual event handlers, override them in your derived class
+		virtual void OnCancelButtonClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnOKButtonClick( wxCommandEvent& event ) { event.Skip(); }
+
+
 	public:
 
 		newStageDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Create New Stage"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 396,167 ), long style = wxDEFAULT_DIALOG_STYLE );
@@ -173,6 +209,11 @@ class newScriptDialog : public wxDialog
 		wxTextCtrl* m_scriptName_textCtrl;
 		wxButton* m_cancel_button;
 		wxButton* m_ok_button;
+
+		// Virtual event handlers, override them in your derived class
+		virtual void OnCancelButtonClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnOKButtonClick( wxCommandEvent& event ) { event.Skip(); }
+
 
 	public:
 

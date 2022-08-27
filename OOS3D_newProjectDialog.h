@@ -16,6 +16,11 @@ class OOS3D_newProjectDialog : public newProjectDialog
 	public:
 		/** Constructor */
 		OOS3D_newProjectDialog( wxWindow* parent );
+
+		void OnCancelButtonClick( wxCommandEvent& event );
+		void OnOKButtonClick( wxCommandEvent& event );
+
+		wxString project_name;
 	//// end generated class members
 
 };

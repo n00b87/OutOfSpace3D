@@ -116,6 +116,12 @@ OOS3D_Engine::OOS3D_Engine( wxWindow* parent, wxWindowID id, const wxString& tit
 
 	m_build_menu->AppendSeparator();
 
+	wxMenuItem* m_abortRun_menuItem;
+	m_abortRun_menuItem = new wxMenuItem( m_build_menu, wxID_ANY, wxString( wxT("Stop Execution") ) , wxEmptyString, wxITEM_NORMAL );
+	m_build_menu->Append( m_abortRun_menuItem );
+
+	m_build_menu->AppendSeparator();
+
 	wxMenuItem* m_dist_menuItem;
 	m_dist_menuItem = new wxMenuItem( m_build_menu, wxID_ANY, wxString( wxT("Distribute Game") ) , wxEmptyString, wxITEM_NORMAL );
 	m_build_menu->Append( m_dist_menuItem );
@@ -281,11 +287,60 @@ OOS3D_Engine::OOS3D_Engine( wxWindow* parent, wxWindowID id, const wxString& tit
 	m_edit_menu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( OOS3D_Engine::OnDeleteMenuSelect ), this, m_delete_menuItem->GetId());
 	m_edit_menu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( OOS3D_Engine::OnSelectAllMenuSelect ), this, m_selectAll_menuItem->GetId());
 	m_project_menu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( OOS3D_Engine::OnNewStageMenuSelect ), this, m_newStage_menuItem->GetId());
+	m_project_menu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( OOS3D_Engine::OnNewScriptMenuSelect ), this, m_newScript_menuItem->GetId());
+	m_project_menu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( OOS3D_Engine::OnImportMeshMenuSelect ), this, m_import3DAssets_menuItem->GetId());
+	m_project_menu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( OOS3D_Engine::OnImportAudioMenuSelect ), this, m_importAudio_menuItem->GetId());
+	m_project_menu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( OOS3D_Engine::OnImportTextureMenuSelect ), this, m_importTextures_menuItem->GetId());
+	m_project_menu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( OOS3D_Engine::OnImportVideoMenuSelect ), this, m_importVideo_menuItem->GetId());
+	m_project_menu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( OOS3D_Engine::OnImportScriptMenuSelect ), this, m_importScripts_menuItem->GetId());
+	m_project_menu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( OOS3D_Engine::OnImportDataMenuSelect ), this, m_importData_menuItem->GetId());
+	m_project_menu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( OOS3D_Engine::OnProjectSettingsMenuSelect ), this, m_projectSettings_menuItem->GetId());
+	m_build_menu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( OOS3D_Engine::OnRunGameMenuSelect ), this, m_run_menuItem->GetId());
+	m_build_menu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( OOS3D_Engine::OnRunStageMenuSelect ), this, m_runStage_menuItem->GetId());
+	m_build_menu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( OOS3D_Engine::OnAbortMenuSelect ), this, m_abortRun_menuItem->GetId());
+	m_build_menu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( OOS3D_Engine::OnDistributeMenuSelect ), this, m_dist_menuItem->GetId());
+	m_help_menu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( OOS3D_Engine::OnAboutMenuSelect ), this, m_about_menuItem->GetId());
+	this->Connect( m_newProject_tool->GetId(), wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( OOS3D_Engine::OnNewProjectMenuSelect ) );
+	this->Connect( m_openProject_tool->GetId(), wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( OOS3D_Engine::OnLoadProjectMenuSelect ) );
+	this->Connect( m_saveProject_tool->GetId(), wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( OOS3D_Engine::OnSaveProjectMenuSelect ) );
+	this->Connect( m_play_tool->GetId(), wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( OOS3D_Engine::OnRunStageMenuSelect ) );
+	this->Connect( m_stop_tool->GetId(), wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( OOS3D_Engine::OnAbortMenuSelect ) );
+	this->Connect( m_view_tool->GetId(), wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( OOS3D_Engine::OnViewToolSelect ) );
+	this->Connect( m_select_tool->GetId(), wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( OOS3D_Engine::OnSelectToolSelect ) );
+	this->Connect( m_boxSelect_tool->GetId(), wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( OOS3D_Engine::OnBoxSelectToolSelect ) );
+	this->Connect( m_move_tool->GetId(), wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( OOS3D_Engine::OnMoveToolSelect ) );
+	this->Connect( m_rotate_tool->GetId(), wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( OOS3D_Engine::OnRotateToolSelect ) );
+	this->Connect( m_scale_tool->GetId(), wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( OOS3D_Engine::OnScaleToolSelect ) );
+	this->Connect( m_terrain_tool->GetId(), wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( OOS3D_Engine::OnSetTerrainToolSelect ) );
+	this->Connect( m_addActor_tool->GetId(), wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( OOS3D_Engine::OnAddActorToolSelect ) );
+	this->Connect( m_addLight_tool->GetId(), wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( OOS3D_Engine::OnAddLightToolSelect ) );
+	this->Connect( m_addCamera_tool->GetId(), wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( OOS3D_Engine::OnAddCameraToolSelect ) );
+	this->Connect( m_effect_tool->GetId(), wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( OOS3D_Engine::OnAddEffectToolSelect ) );
+	this->Connect( m_event_tool->GetId(), wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( OOS3D_Engine::OnAddEventToolSelect ) );
+	m_project_treeCtrl->Connect( wxEVT_COMMAND_TREE_ITEM_MENU, wxTreeEventHandler( OOS3D_Engine::OnProjectTreeContextMenu ), NULL, this );
 }
 
 OOS3D_Engine::~OOS3D_Engine()
 {
 	// Disconnect Events
+	this->Disconnect( m_newProject_tool->GetId(), wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( OOS3D_Engine::OnNewProjectMenuSelect ) );
+	this->Disconnect( m_openProject_tool->GetId(), wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( OOS3D_Engine::OnLoadProjectMenuSelect ) );
+	this->Disconnect( m_saveProject_tool->GetId(), wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( OOS3D_Engine::OnSaveProjectMenuSelect ) );
+	this->Disconnect( m_play_tool->GetId(), wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( OOS3D_Engine::OnRunStageMenuSelect ) );
+	this->Disconnect( m_stop_tool->GetId(), wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( OOS3D_Engine::OnAbortMenuSelect ) );
+	this->Disconnect( m_view_tool->GetId(), wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( OOS3D_Engine::OnViewToolSelect ) );
+	this->Disconnect( m_select_tool->GetId(), wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( OOS3D_Engine::OnSelectToolSelect ) );
+	this->Disconnect( m_boxSelect_tool->GetId(), wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( OOS3D_Engine::OnBoxSelectToolSelect ) );
+	this->Disconnect( m_move_tool->GetId(), wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( OOS3D_Engine::OnMoveToolSelect ) );
+	this->Disconnect( m_rotate_tool->GetId(), wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( OOS3D_Engine::OnRotateToolSelect ) );
+	this->Disconnect( m_scale_tool->GetId(), wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( OOS3D_Engine::OnScaleToolSelect ) );
+	this->Disconnect( m_terrain_tool->GetId(), wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( OOS3D_Engine::OnSetTerrainToolSelect ) );
+	this->Disconnect( m_addActor_tool->GetId(), wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( OOS3D_Engine::OnAddActorToolSelect ) );
+	this->Disconnect( m_addLight_tool->GetId(), wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( OOS3D_Engine::OnAddLightToolSelect ) );
+	this->Disconnect( m_addCamera_tool->GetId(), wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( OOS3D_Engine::OnAddCameraToolSelect ) );
+	this->Disconnect( m_effect_tool->GetId(), wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( OOS3D_Engine::OnAddEffectToolSelect ) );
+	this->Disconnect( m_event_tool->GetId(), wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( OOS3D_Engine::OnAddEventToolSelect ) );
+	m_project_treeCtrl->Disconnect( wxEVT_COMMAND_TREE_ITEM_MENU, wxTreeEventHandler( OOS3D_Engine::OnProjectTreeContextMenu ), NULL, this );
 
 }
 
@@ -338,10 +393,18 @@ newProjectDialog::newProjectDialog( wxWindow* parent, wxWindowID id, const wxStr
 	this->Layout();
 
 	this->Centre( wxBOTH );
+
+	// Connect Events
+	m_cancel_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( newProjectDialog::OnCancelButtonClick ), NULL, this );
+	m_ok_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( newProjectDialog::OnOKButtonClick ), NULL, this );
 }
 
 newProjectDialog::~newProjectDialog()
 {
+	// Disconnect Events
+	m_cancel_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( newProjectDialog::OnCancelButtonClick ), NULL, this );
+	m_ok_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( newProjectDialog::OnOKButtonClick ), NULL, this );
+
 }
 
 newStageDialog::newStageDialog( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
@@ -415,10 +478,18 @@ newStageDialog::newStageDialog( wxWindow* parent, wxWindowID id, const wxString&
 	this->Layout();
 
 	this->Centre( wxBOTH );
+
+	// Connect Events
+	m_cancel_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( newStageDialog::OnCancelButtonClick ), NULL, this );
+	m_ok_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( newStageDialog::OnOKButtonClick ), NULL, this );
 }
 
 newStageDialog::~newStageDialog()
 {
+	// Disconnect Events
+	m_cancel_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( newStageDialog::OnCancelButtonClick ), NULL, this );
+	m_ok_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( newStageDialog::OnOKButtonClick ), NULL, this );
+
 }
 
 newScriptDialog::newScriptDialog( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
@@ -473,8 +544,16 @@ newScriptDialog::newScriptDialog( wxWindow* parent, wxWindowID id, const wxStrin
 	this->Layout();
 
 	this->Centre( wxBOTH );
+
+	// Connect Events
+	m_cancel_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( newScriptDialog::OnCancelButtonClick ), NULL, this );
+	m_ok_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( newScriptDialog::OnOKButtonClick ), NULL, this );
 }
 
 newScriptDialog::~newScriptDialog()
 {
+	// Disconnect Events
+	m_cancel_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( newScriptDialog::OnCancelButtonClick ), NULL, this );
+	m_ok_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( newScriptDialog::OnOKButtonClick ), NULL, this );
+
 }
