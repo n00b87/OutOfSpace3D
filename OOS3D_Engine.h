@@ -33,6 +33,8 @@
 #include <wx/button.h>
 #include <wx/dialog.h>
 #include <wx/combobox.h>
+#include <wx/filepicker.h>
+#include <wx/checkbox.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -220,6 +222,37 @@ class newScriptDialog : public wxDialog
 		newScriptDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Create New Script"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 396,167 ), long style = wxDEFAULT_DIALOG_STYLE );
 
 		~newScriptDialog();
+
+};
+
+///////////////////////////////////////////////////////////////////////////////
+/// Class importModelDialog
+///////////////////////////////////////////////////////////////////////////////
+class importModelDialog : public wxDialog
+{
+	private:
+
+	protected:
+		wxStaticText* m_staticText5;
+		wxFilePickerCtrl* m_filePicker1;
+		wxCheckBox* m_importModels_checkBox;
+		wxCheckBox* m_importTextures_checkBox;
+		wxCheckBox* m_importArmature_checkBox;
+		wxCheckBox* m_importAnimation_checkBox;
+		wxCheckBox* m_importScene_checkBox;
+		wxButton* m_cancel_button;
+		wxButton* m_import_button;
+
+		// Virtual event handlers, override them in your derived class
+		virtual void OnCancelButtonClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnOKButtonClick( wxCommandEvent& event ) { event.Skip(); }
+
+
+	public:
+
+		importModelDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Import 3D Mesh"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 436,274 ), long style = wxDEFAULT_DIALOG_STYLE );
+
+		~importModelDialog();
 
 };
 

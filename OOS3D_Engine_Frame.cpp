@@ -3,14 +3,27 @@
 #include <wx/stdpaths.h>
 
 #include "OOS3D_Engine_Frame.h"
+#include "OOS3D_newProjectDialog.h"
 #include "GameEngine/Core/OOS3D_Core.h"
-#include "stage_view.h"
 
 OOS3D_Engine_Frame::OOS3D_Engine_Frame( wxWindow* parent )
 :
 OOS3D_Engine( parent )
 {
     app_path = wxStandardPaths::Get().GetExecutablePath();
+    game_project = NULL;
+
+    wxFileName gfx_path = app_path;
+    gfx_path.AppendDir(_("gfx"));
+
+    wxFileName root_image = gfx_path;
+    root_image.SetFullName(_("oos3d_icon.png"));
+
+    project_tree_imageList = new wxImageList(16,16,true);
+    project_tree_rootImage = project_tree_imageList->Add(wxBitmap(wxImage(root_image.GetFullPath())));
+    project_tree_folderImage  = project_tree_imageList->Add(wxArtProvider::GetBitmap( wxART_FOLDER, wxART_MENU ));
+    project_tree_fileImage = project_tree_imageList->Add(wxArtProvider::GetBitmap( wxART_NORMAL_FILE, wxART_MENU ));
+    m_project_treeCtrl->AssignImageList(project_tree_imageList);
 }
 
 //Setup Test Project
@@ -128,16 +141,43 @@ void OOS3D_Engine_Frame::SetupTestProject()
     game_project->name = _("My Test Project");
 }
 
+void OOS3D_Engine_Frame::CreateProject(wxString project_name)
+{
+    if(game_project)
+    {
+        for(int i = 0; i < game_project->stages.size(); i++)
+        {
+            if(game_project->stages[i].render_panel)
+            {
+                if(game_project->stages[i].render_panel->GetDevice())
+                {
+                    game_project->stages[i].render_panel->GetDevice()->drop();
+                }
+            }
+        }
+
+        delete game_project;
+    }
+
+    game_project = new OOS3D_Project();
+    game_project->name = project_name;
+}
+
 void OOS3D_Engine_Frame::OnNewProjectMenuSelect( wxCommandEvent& event )
 {
     //Will need to add some code here to save current project
 
-    game_project = new OOS3D_Project();
+    OOS3D_newProjectDialog newProject_dlg(this);
+    newProject_dlg.ShowModal();
+
+    if(newProject_dlg.exit_status == NEWPROJECT_EXIT_STATUS_CANCEL)
+        return;
+
+    CreateProject(newProject_dlg.project_name);
 
     //This is only here for testing purposes and should be commented out before release
-    SetupTestProject();
+    //SetupTestProject();
     //---------------------------------------------------------------------------------
-
 
     SetupProjectTree();
 
@@ -163,17 +203,7 @@ void OOS3D_Engine_Frame::OnExitMenuSelect( wxCommandEvent& event )
 //New Project Setup
 void OOS3D_Engine_Frame::SetupProjectTree()
 {
-    wxFileName gfx_path = app_path;
-    gfx_path.AppendDir(_("gfx"));
-
-    wxFileName root_image = gfx_path;
-    root_image.SetFullName(_("oos3d_icon.png"));
-
-    project_tree_imageList = new wxImageList(16,16,true);
-    project_tree_rootImage = project_tree_imageList->Add(wxBitmap(wxImage(root_image.GetFullPath())));
-    project_tree_folderImage  = project_tree_imageList->Add(wxArtProvider::GetBitmap( wxART_FOLDER, wxART_MENU ));
-    project_tree_fileImage = project_tree_imageList->Add(wxArtProvider::GetBitmap( wxART_NORMAL_FILE, wxART_MENU ));
-    m_project_treeCtrl->AssignImageList(project_tree_imageList);
+    m_project_treeCtrl->DeleteAllItems();
 
     game_project->project_root = m_project_treeCtrl->AddRoot(game_project->name, project_tree_rootImage);
 
@@ -264,4 +294,3 @@ void OOS3D_Engine_Frame::SetupProjectTree()
     m_stage_auinotebook->AddPage(game_project->stages[0].render_panel, game_project->stages[0].name, true);
     */
 }
-

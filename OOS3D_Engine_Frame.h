@@ -19,15 +19,56 @@ class OOS3D_Engine_Frame : public OOS3D_Engine
 		void OnLoadProjectMenuSelect( wxCommandEvent& event );
 		void OnSaveProjectMenuSelect( wxCommandEvent& event );
 		void OnExitMenuSelect( wxCommandEvent& event );
+		//void OnUndoMenuSelect( wxCommandEvent& event );
+		//void OnRedoMenuSelect( wxCommandEvent& event );
+		//void OnDuplicateMenuSelect( wxCommandEvent& event );
+		//void OnDeleteMenuSelect( wxCommandEvent& event );
+		//void OnSelectAllMenuSelect( wxCommandEvent& event );
+		void OnNewStageMenuSelect( wxCommandEvent& event );
+		//void OnNewScriptMenuSelect( wxCommandEvent& event );
+		void OnImportMeshMenuSelect( wxCommandEvent& event );
+		//void OnImportAudioMenuSelect( wxCommandEvent& event );
+		void OnImportTextureMenuSelect( wxCommandEvent& event );
+		//void OnImportVideoMenuSelect( wxCommandEvent& event );
+		//void OnImportScriptMenuSelect( wxCommandEvent& event );
+		//void OnImportDataMenuSelect( wxCommandEvent& event );
+		//void OnProjectSettingsMenuSelect( wxCommandEvent& event );
+		//void OnRunGameMenuSelect( wxCommandEvent& event );
+		//void OnRunStageMenuSelect( wxCommandEvent& event );
+		//void OnAbortMenuSelect( wxCommandEvent& event );
+		//void OnDistributeMenuSelect( wxCommandEvent& event );
+		//void OnAboutMenuSelect( wxCommandEvent& event );
+		//void OnViewToolSelect( wxCommandEvent& event );
+		//void OnSelectToolSelect( wxCommandEvent& event );
+		//void OnBoxSelectToolSelect( wxCommandEvent& event );
+		//void OnMoveToolSelect( wxCommandEvent& event );
+		//void OnRotateToolSelect( wxCommandEvent& event );
+		//void OnScaleToolSelect( wxCommandEvent& event );
+		//void OnSetTerrainToolSelect( wxCommandEvent& event );
+		//void OnAddActorToolSelect( wxCommandEvent& event );
+		//void OnAddLightToolSelect( wxCommandEvent& event );
+		//void OnAddCameraToolSelect( wxCommandEvent& event );
+		//void OnAddEffectToolSelect( wxCommandEvent& event );
+		//void OnAddEventToolSelect( wxCommandEvent& event );
+		//void OnProjectTreeContextMenu( wxTreeEvent& event );
+
 	public:
 		/** Constructor */
 		OOS3D_Engine_Frame( wxWindow* parent );
 
 		void SetupProjectTree();
+
 		OOS3D_Project* game_project;
+
+		//NewProject
+		void CreateProject(wxString project_name);
 
 		//SetupTestProject
 		void SetupTestProject();
+
+		//NewStage
+		void CreateStage(wxString stage_name, int stage_type);
+
 
 		wxString app_path;
 
@@ -38,6 +79,9 @@ class OOS3D_Engine_Frame : public OOS3D_Engine
 
         int ClientH(float pct) { return (int) (GetClientSize().y * pct / 100); }
 		int ClientW(float pct) { return (int) (GetClientSize().x * pct / 100); }
+
+		wxFileName openFileDialog(wxString title, wxString default_wildcard, int flag);
+		wxArrayString openMultiFileDialog(wxString title, wxString default_wildcard, int flag)
 
 	//// end generated class members
 

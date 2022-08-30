@@ -2,6 +2,7 @@
 #define OOS3D_PROJECT_STRUCTURES_H_INCLUDED
 
 #include <wx/wx.h>
+#include <wx/treectrl.h>
 #include <vector>
 #include "GameEngine/Core/OOS3D_Core.h"
 #include "wxIrrlicht.h"
@@ -11,6 +12,8 @@ struct OOS3D_Project_Terrain
     uint32_t type;
     wxString name;
 
+    OOS3D_Terrain engine_terrain;
+
     wxTreeItemId treeItem;
 
     //TO DO: Terrain Atributes
@@ -19,6 +22,8 @@ struct OOS3D_Project_Terrain
 struct OOS3D_Project_Actor
 {
     wxString name;
+
+    OOS3D_Actor engine_actor;
 
     wxTreeItemId treeItem;
 
@@ -47,6 +52,8 @@ struct OOS3D_Project_Light
 {
     wxString name;
 
+    OOS3D_Light engine_light;
+
     wxTreeItemId treeItem;
 
     uint32_t type;
@@ -68,6 +75,8 @@ struct OOS3D_Project_Camera
 {
     wxString name;
 
+    OOS3D_Camera engine_camera;
+
     wxTreeItemId treeItem;
 
     uint32_t type;
@@ -77,6 +86,8 @@ struct OOS3D_Project_Camera
     double init_z;
 
     bool init_pos_on_reload;
+
+    wxString ctrl_script;
 
     //TO DO: Physics Attributes
 };
@@ -85,6 +96,8 @@ struct OOS3D_Project_Effect
 {
     wxString name;
 
+    OOS3D_Effect engine_effect;
+
     wxTreeItemId treeItem;
 
     uint32_t type;
@@ -94,6 +107,8 @@ struct OOS3D_Project_Effect
     double init_z;
 
     bool init_pos_on_reload;
+
+    wxString ctrl_script;
 
     //TO DO: Physics Attributes
 };
@@ -102,6 +117,8 @@ struct OOS3D_Project_Event
 {
     wxString name;
 
+    OOS3D_Event engine_event;
+
     wxTreeItemId treeItem;
 
     uint32_t type;
@@ -112,12 +129,23 @@ struct OOS3D_Project_Event
 
     bool init_pos_on_reload;
 
+    wxString ctrl_script;
+
     //TO DO: Physics Attributes
 };
+
+#define OOS3D_STAGE_TYPE_3D 0
+#define OOS3D_STAGE_TYPE_2D 1
 
 struct OOS3D_Project_Stage
 {
     wxString name;
+
+    OOS3D_Stage engine_stage;
+
+    wxString ctrl_script;
+
+    int type;
 
     wxIrrlicht* render_panel;
 

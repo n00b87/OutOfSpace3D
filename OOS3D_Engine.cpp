@@ -74,7 +74,7 @@ OOS3D_Engine::OOS3D_Engine( wxWindow* parent, wxWindowID id, const wxString& tit
 	m_project_menu->AppendSeparator();
 
 	wxMenuItem* m_import3DAssets_menuItem;
-	m_import3DAssets_menuItem = new wxMenuItem( m_project_menu, wxID_ANY, wxString( wxT("Import 3D Assets") ) , wxEmptyString, wxITEM_NORMAL );
+	m_import3DAssets_menuItem = new wxMenuItem( m_project_menu, wxID_ANY, wxString( wxT("Import Mesh") ) , wxEmptyString, wxITEM_NORMAL );
 	m_project_menu->Append( m_import3DAssets_menuItem );
 
 	wxMenuItem* m_importAudio_menuItem;
@@ -555,5 +555,153 @@ newScriptDialog::~newScriptDialog()
 	// Disconnect Events
 	m_cancel_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( newScriptDialog::OnCancelButtonClick ), NULL, this );
 	m_ok_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( newScriptDialog::OnOKButtonClick ), NULL, this );
+
+}
+
+importModelDialog::importModelDialog( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+{
+	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
+
+	wxBoxSizer* bSizer19;
+	bSizer19 = new wxBoxSizer( wxVERTICAL );
+
+
+	bSizer19->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer20;
+	bSizer20 = new wxBoxSizer( wxHORIZONTAL );
+
+
+	bSizer20->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_staticText5 = new wxStaticText( this, wxID_ANY, wxT("File"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText5->Wrap( -1 );
+	bSizer20->Add( m_staticText5, 0, wxALL, 5 );
+
+	m_filePicker1 = new wxFilePickerCtrl( this, wxID_ANY, wxEmptyString, wxT("Select a file"), wxT("*.*"), wxDefaultPosition, wxDefaultSize, wxFLP_DEFAULT_STYLE );
+	bSizer20->Add( m_filePicker1, 8, wxALL, 5 );
+
+
+	bSizer20->Add( 0, 0, 1, wxEXPAND, 5 );
+
+
+	bSizer19->Add( bSizer20, 1, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer21;
+	bSizer21 = new wxBoxSizer( wxHORIZONTAL );
+
+
+	bSizer21->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_importModels_checkBox = new wxCheckBox( this, wxID_ANY, wxT("Import Models"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_importModels_checkBox->SetValue(true);
+	bSizer21->Add( m_importModels_checkBox, 4, wxALL, 5 );
+
+
+	bSizer21->Add( 0, 0, 1, wxEXPAND, 5 );
+
+
+	bSizer19->Add( bSizer21, 1, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer214;
+	bSizer214 = new wxBoxSizer( wxHORIZONTAL );
+
+
+	bSizer214->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_importTextures_checkBox = new wxCheckBox( this, wxID_ANY, wxT("Import Textures"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_importTextures_checkBox->SetValue(true);
+	bSizer214->Add( m_importTextures_checkBox, 4, wxALL, 5 );
+
+
+	bSizer214->Add( 0, 0, 1, wxEXPAND, 5 );
+
+
+	bSizer19->Add( bSizer214, 1, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer211;
+	bSizer211 = new wxBoxSizer( wxHORIZONTAL );
+
+
+	bSizer211->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_importArmature_checkBox = new wxCheckBox( this, wxID_ANY, wxT("Import Armatures"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_importArmature_checkBox->SetValue(true);
+	bSizer211->Add( m_importArmature_checkBox, 4, wxALL, 5 );
+
+
+	bSizer211->Add( 0, 0, 1, wxEXPAND, 5 );
+
+
+	bSizer19->Add( bSizer211, 1, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer212;
+	bSizer212 = new wxBoxSizer( wxHORIZONTAL );
+
+
+	bSizer212->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_importAnimation_checkBox = new wxCheckBox( this, wxID_ANY, wxT("Import Animations"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_importAnimation_checkBox->SetValue(true);
+	bSizer212->Add( m_importAnimation_checkBox, 4, wxALL, 5 );
+
+
+	bSizer212->Add( 0, 0, 1, wxEXPAND, 5 );
+
+
+	bSizer19->Add( bSizer212, 1, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer213;
+	bSizer213 = new wxBoxSizer( wxHORIZONTAL );
+
+
+	bSizer213->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_importScene_checkBox = new wxCheckBox( this, wxID_ANY, wxT("Import Scene As Stage"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer213->Add( m_importScene_checkBox, 4, wxALL, 5 );
+
+
+	bSizer213->Add( 0, 0, 1, wxEXPAND, 5 );
+
+
+	bSizer19->Add( bSizer213, 1, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer34;
+	bSizer34 = new wxBoxSizer( wxVERTICAL );
+
+	wxBoxSizer* bSizer35;
+	bSizer35 = new wxBoxSizer( wxHORIZONTAL );
+
+
+	bSizer35->Add( 0, 0, 2, wxEXPAND, 5 );
+
+	m_cancel_button = new wxButton( this, wxID_ANY, wxT("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer35->Add( m_cancel_button, 1, wxALL|wxEXPAND, 5 );
+
+	m_import_button = new wxButton( this, wxID_ANY, wxT("Import"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer35->Add( m_import_button, 1, wxALL|wxEXPAND, 5 );
+
+
+	bSizer34->Add( bSizer35, 1, wxEXPAND, 5 );
+
+
+	bSizer19->Add( bSizer34, 1, wxEXPAND, 5 );
+
+
+	this->SetSizer( bSizer19 );
+	this->Layout();
+
+	this->Centre( wxBOTH );
+
+	// Connect Events
+	m_cancel_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( importModelDialog::OnCancelButtonClick ), NULL, this );
+	m_import_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( importModelDialog::OnOKButtonClick ), NULL, this );
+}
+
+importModelDialog::~importModelDialog()
+{
+	// Disconnect Events
+	m_cancel_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( importModelDialog::OnCancelButtonClick ), NULL, this );
+	m_import_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( importModelDialog::OnOKButtonClick ), NULL, this );
 
 }
