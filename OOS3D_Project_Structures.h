@@ -12,18 +12,38 @@ struct OOS3D_Project_Terrain
     uint32_t type;
     wxString name;
 
-    OOS3D_Terrain engine_terrain;
+    int id;
+
+    int engine_terrain;
 
     wxTreeItemId treeItem;
 
     //TO DO: Terrain Atributes
 };
 
+struct OOS3D_Project_Mesh
+{
+    wxString name;
+    wxString fname;
+
+    int id;
+
+    int index;
+
+    wxTreeItemId treeItem;
+};
+
 struct OOS3D_Project_Actor
 {
     wxString name;
 
-    OOS3D_Actor engine_actor;
+    int id;
+
+    int index;
+
+    int engine_actor;
+
+    int mesh_id;
 
     wxTreeItemId treeItem;
 
@@ -52,7 +72,9 @@ struct OOS3D_Project_Light
 {
     wxString name;
 
-    OOS3D_Light engine_light;
+    int id;
+
+    int engine_light;
 
     wxTreeItemId treeItem;
 
@@ -75,7 +97,9 @@ struct OOS3D_Project_Camera
 {
     wxString name;
 
-    OOS3D_Camera engine_camera;
+    int id;
+
+    int engine_camera;
 
     wxTreeItemId treeItem;
 
@@ -96,7 +120,9 @@ struct OOS3D_Project_Effect
 {
     wxString name;
 
-    OOS3D_Effect engine_effect;
+    int id;
+
+    int engine_effect;
 
     wxTreeItemId treeItem;
 
@@ -117,7 +143,9 @@ struct OOS3D_Project_Event
 {
     wxString name;
 
-    OOS3D_Event engine_event;
+    int id;
+
+    int engine_event;
 
     wxTreeItemId treeItem;
 
@@ -140,6 +168,8 @@ struct OOS3D_Project_Event
 struct OOS3D_Project_Stage
 {
     wxString name;
+
+    int id;
 
     OOS3D_Stage engine_stage;
 
@@ -186,19 +216,33 @@ struct OOS3D_Project
     //Game Description
     wxString game_description; //Description and Notes from Developer
 
+    int id_counter = 0;
+
     //Assets
-    wxArrayString Models;
+    wxTreeItemId models_treeItem;
+    wxTreeItemId textures_treeItem;
+    wxTreeItemId audio_treeItem;
+    wxTreeItemId video_treeItem;
+    wxTreeItemId scripts_treeItem;
+    wxTreeItemId data_treeItem;
+
+    std::vector<OOS3D_Project_Mesh> Models;
+
+    /*
+    //Need to completely rethink how these resources are structured
     wxArrayString Textures;
     wxArrayString Audio;
     wxArrayString Video;
     wxArrayString Scripts;
     wxArrayString Data;
+    */
 
     //Stages
     std::vector<OOS3D_Project_Stage> stages;
 
     //project tree root
     wxTreeItemId project_root;
+    wxTreeItemId asset_root;
 
 
 };

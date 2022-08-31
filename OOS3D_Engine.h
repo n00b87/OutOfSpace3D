@@ -234,8 +234,7 @@ class importModelDialog : public wxDialog
 
 	protected:
 		wxStaticText* m_staticText5;
-		wxFilePickerCtrl* m_filePicker1;
-		wxCheckBox* m_importModels_checkBox;
+		wxFilePickerCtrl* m_asset_filePicker;
 		wxCheckBox* m_importTextures_checkBox;
 		wxCheckBox* m_importArmature_checkBox;
 		wxCheckBox* m_importAnimation_checkBox;

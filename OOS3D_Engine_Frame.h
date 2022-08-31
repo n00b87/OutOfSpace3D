@@ -69,6 +69,9 @@ class OOS3D_Engine_Frame : public OOS3D_Engine
 		//NewStage
 		void CreateStage(wxString stage_name, int stage_type);
 
+		//Import 3D Model
+		void ImportModel(wxFileName fname, bool animation_flag, bool texture_flag, bool armature_flag, bool scene_flag);
+
 
 		wxString app_path;
 
@@ -77,11 +80,16 @@ class OOS3D_Engine_Frame : public OOS3D_Engine
         int project_tree_folderImage;
         int project_tree_fileImage;
 
+        wxImageList* asset_tree_imageList;
+		int asset_tree_rootImage;
+        int asset_tree_folderImage;
+        int asset_tree_fileImage;
+
         int ClientH(float pct) { return (int) (GetClientSize().y * pct / 100); }
 		int ClientW(float pct) { return (int) (GetClientSize().x * pct / 100); }
 
 		wxFileName openFileDialog(wxString title, wxString default_wildcard, int flag);
-		wxArrayString openMultiFileDialog(wxString title, wxString default_wildcard, int flag)
+		wxArrayString openMultiFileDialog(wxString title, wxString default_wildcard, int flag);
 
 	//// end generated class members
 

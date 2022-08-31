@@ -578,30 +578,14 @@ importModelDialog::importModelDialog( wxWindow* parent, wxWindowID id, const wxS
 	m_staticText5->Wrap( -1 );
 	bSizer20->Add( m_staticText5, 0, wxALL, 5 );
 
-	m_filePicker1 = new wxFilePickerCtrl( this, wxID_ANY, wxEmptyString, wxT("Select a file"), wxT("*.*"), wxDefaultPosition, wxDefaultSize, wxFLP_DEFAULT_STYLE );
-	bSizer20->Add( m_filePicker1, 8, wxALL, 5 );
+	m_asset_filePicker = new wxFilePickerCtrl( this, wxID_ANY, wxEmptyString, wxT("Select a file"), wxT("*.*"), wxDefaultPosition, wxDefaultSize, wxFLP_DEFAULT_STYLE );
+	bSizer20->Add( m_asset_filePicker, 8, wxALL, 5 );
 
 
 	bSizer20->Add( 0, 0, 1, wxEXPAND, 5 );
 
 
 	bSizer19->Add( bSizer20, 1, wxEXPAND, 5 );
-
-	wxBoxSizer* bSizer21;
-	bSizer21 = new wxBoxSizer( wxHORIZONTAL );
-
-
-	bSizer21->Add( 0, 0, 1, wxEXPAND, 5 );
-
-	m_importModels_checkBox = new wxCheckBox( this, wxID_ANY, wxT("Import Models"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_importModels_checkBox->SetValue(true);
-	bSizer21->Add( m_importModels_checkBox, 4, wxALL, 5 );
-
-
-	bSizer21->Add( 0, 0, 1, wxEXPAND, 5 );
-
-
-	bSizer19->Add( bSizer21, 1, wxEXPAND, 5 );
 
 	wxBoxSizer* bSizer214;
 	bSizer214 = new wxBoxSizer( wxHORIZONTAL );
@@ -657,7 +641,7 @@ importModelDialog::importModelDialog( wxWindow* parent, wxWindowID id, const wxS
 
 	bSizer213->Add( 0, 0, 1, wxEXPAND, 5 );
 
-	m_importScene_checkBox = new wxCheckBox( this, wxID_ANY, wxT("Import Scene As Stage"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_importScene_checkBox = new wxCheckBox( this, wxID_ANY, wxT("Import Scene Description"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer213->Add( m_importScene_checkBox, 4, wxALL, 5 );
 
 

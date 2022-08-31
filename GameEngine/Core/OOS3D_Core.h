@@ -41,6 +41,7 @@ struct OOS3D_Terrain
 
 struct OOS3D_Texture
 {
+    int id;
 	std::string texture_file;
 	ITexture* texture;
 
@@ -58,12 +59,13 @@ struct OOS3D_Texture
 
 struct OOS3D_Mesh
 {
+    int id;
 	int mesh_type;
-	std::string mesh_file;
+	path mesh_file;
 
 	IAnimatedMesh* node;
 
-	OOS3D_Texture mesh_texture;
+	int mesh_texture;
 	bool use_ext_texture;
 };
 
@@ -87,7 +89,7 @@ struct OOS3D_Actor
 {
     int id;
 
-    std::string actor_file;
+    path actor_file;
 
     IAnimatedMeshSceneNode* node;
 
@@ -219,6 +221,43 @@ struct OOS3D_Window
 {
     IrrlichtDevice* device;
 };
+
+
+struct OOS3D_Game
+{
+    IrrlichtDevice* device;
+    std::vector<OOS3D_Stage> stage;
+
+    std::vector<OOS3D_Texture> texture;
+    std::vector<OOS3D_Mesh> mesh;
+};
+
+OOS3D_Game game;
+
+//returns vector index
+int OOS3D_LoadMesh(IrrlichtDevice* device, path mesh_file, int texture_index=-1)
+{
+    ISceneManager* smgr = device->getSceneManager();
+    OOS3D_Mesh mesh;
+    mesh.mesh_file = mesh_file;
+    mesh.node = smgr->getMesh(mesh_file);
+
+    if(texture_index >= 0)
+    {
+        mesh.mesh_texture = texture_index;
+
+        //Apply these to actor
+        //mesh.node->setMaterialFlag(EMF_LIGHTING, false);
+        //mesh.node->setMaterialTexture( 0, game.texture[texture_index].texture );
+
+        mesh.use_ext_texture = true;
+    }
+
+    int vector_index = game.mesh.size();
+    game.mesh.push_back(mesh);
+
+    return vector_index;
+}
 
 
 OOS3D_Window* OOS3D_WindowOpenEx(std::string game_name, SIrrlichtCreationParameters param);

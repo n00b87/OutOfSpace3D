@@ -24,6 +24,13 @@ OOS3D_Engine( parent )
     project_tree_folderImage  = project_tree_imageList->Add(wxArtProvider::GetBitmap( wxART_FOLDER, wxART_MENU ));
     project_tree_fileImage = project_tree_imageList->Add(wxArtProvider::GetBitmap( wxART_NORMAL_FILE, wxART_MENU ));
     m_project_treeCtrl->AssignImageList(project_tree_imageList);
+
+    asset_tree_imageList = new wxImageList(16,16,true);
+    asset_tree_rootImage = asset_tree_imageList->Add(wxBitmap(wxImage(root_image.GetFullPath())));
+    asset_tree_folderImage  = asset_tree_imageList->Add(wxArtProvider::GetBitmap( wxART_FOLDER, wxART_MENU ));
+    asset_tree_fileImage = asset_tree_imageList->Add(wxArtProvider::GetBitmap( wxART_NORMAL_FILE, wxART_MENU ));
+    m_assets_treeCtrl->AssignImageList(asset_tree_imageList);
+
 }
 
 //Setup Test Project
@@ -203,6 +210,18 @@ void OOS3D_Engine_Frame::OnExitMenuSelect( wxCommandEvent& event )
 //New Project Setup
 void OOS3D_Engine_Frame::SetupProjectTree()
 {
+    m_assets_treeCtrl->DeleteAllItems();
+
+    game_project->asset_root = m_assets_treeCtrl->AddRoot(_("Assets"), asset_tree_rootImage);
+
+
+    game_project->models_treeItem = m_assets_treeCtrl->AppendItem(game_project->asset_root, _("Models"), asset_tree_folderImage);
+    game_project->textures_treeItem = m_assets_treeCtrl->AppendItem(game_project->asset_root, _("Textures"), asset_tree_folderImage);
+    game_project->audio_treeItem = m_assets_treeCtrl->AppendItem(game_project->asset_root, _("Audio"), asset_tree_folderImage);
+    game_project->video_treeItem = m_assets_treeCtrl->AppendItem(game_project->asset_root, _("Video"), asset_tree_folderImage);
+    game_project->scripts_treeItem = m_assets_treeCtrl->AppendItem(game_project->asset_root, _("Scripts"), asset_tree_folderImage);
+    game_project->data_treeItem = m_assets_treeCtrl->AppendItem(game_project->asset_root, _("Data"), asset_tree_folderImage);
+
     m_project_treeCtrl->DeleteAllItems();
 
     game_project->project_root = m_project_treeCtrl->AddRoot(game_project->name, project_tree_rootImage);

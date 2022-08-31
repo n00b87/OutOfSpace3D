@@ -5,6 +5,7 @@
 #include "../../OOS3D_Project_Structures.h"
 #include "../../OOS3D_Engine_Frame.h"
 #include "../../OOS3D_newStageDialog.h"
+#include "../../OOS3D_ImportModelDialog.h"
 #include "../../wxIrrlicht.h"
 
 void OOS3D_Engine_Frame::CreateStage(wxString stage_name, int stage_type)
@@ -21,6 +22,8 @@ void OOS3D_Engine_Frame::CreateStage(wxString stage_name, int stage_type)
     OOS3D_Project_Stage stage;
     stage.name = stage_name;
     stage.type = stage_type;
+    stage.id = game_project->id_counter;
+    game_project->id_counter++;
     stage.render_panel = NULL;
 
 
@@ -53,10 +56,41 @@ void OOS3D_Engine_Frame::OnNewStageMenuSelect( wxCommandEvent& event )
 
 }
 
+void OOS3D_Engine_Frame::ImportModel(wxFileName fname, bool animation_flag, bool textue_flag, bool armature_flag, bool scene_flag)
+{
+    wxFileName mesh_path(app_path);
+    mesh_path.AppendDir(_("AssetLibrary"));
+    mesh_path.AppendDir(_("Mesh"));
+    mesh_path.SetFullName(fname.GetFullName());
+
+    OOS3D_Project_Mesh mesh;
+    mesh.fname = _("AssetLibrary/Mesh/") + fname.GetFullName();
+    mesh.id = game_project->id_counter;
+    game_project->id_counter++;
+
+    mesh.treeItem = m_assets_treeCtrl->AppendItem(game_project->models_treeItem, fname.GetFullName(), project_tree_fileImage);
+
+    game_project->Models.push_back(mesh);
+
+}
 
 void OOS3D_Engine_Frame::OnImportMeshMenuSelect( wxCommandEvent& event )
 {
+    if(!game_project)
+        return;
 
+    OOS3D_importModelDialog importModel_dlg(this);
+    importModel_dlg.ShowModal();
+
+    if(importModel_dlg.exit_status==IMPORTMODEL_EXIT_STATUS_CANCEL)
+        return;
+
+    ImportModel(importModel_dlg.asset_fname,
+                importModel_dlg.animation_flag,
+                importModel_dlg.texture_flag,
+                importModel_dlg.armature_flag,
+                importModel_dlg.scene_flag
+                );
 }
 
 void OOS3D_Engine_Frame::OnImportTextureMenuSelect( wxCommandEvent& event )
