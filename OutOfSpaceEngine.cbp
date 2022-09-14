@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="OutOfSpaceEngine" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/OutOfSpaceEngine" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/OutOfSpaceEngine" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add option="-Wl,--allow-multiple-definition -s -mwindows" />
+					<Add library="C:/dev_libs/wx/lib/gcc510TDM_dll/libwxbase30u.a" />
+					<Add library="C:/dev_libs/wx/lib/gcc510TDM_dll/libwxmsw30u_aui.a" />
+					<Add library="C:/dev_libs/wx/lib/gcc510TDM_dll/libwxmsw30u_core.a" />
+					<Add library="C:/dev_libs/wx/lib/gcc510TDM_dll/libwxmsw30u_stc.a" />
+					<Add library="C:/dev_libs/wx/lib/gcc510TDM_dll/libwxmsw30u_adv.a" />
+					<Add library="C:/dev_libs/wx/lib/gcc510TDM_dll/libwxpng.a" />
+				</Linker>
+			</Target>
+			<Target title="Release64">
+				<Option output="bin/Release64/OutOfSpaceEngine" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release64" />
+				<Option type="1" />
+				<Option compiler="gnu_gcc_compiler_win64" />
+				<Compiler>
+					<Add directory="C:/dev_libs/wx/include" />
+					<Add directory="C:/dev_libs/wx/lib/gcc810_x64_dll/mswu" />
+					<Add directory="C:/dev_libs/irrlicht-1.8.5/include" />
+				</Compiler>
+				<Linker>
+					<Add option="-lwxbase30u -lwxmsw30u_adv -lwxmsw30u_aui -lwxmsw30u_core -lwxmsw30u_stc -lwxmsw30u_propgrid -lwxpng -lirrlicht -Wl,--allow-multiple-definition" />
+					<Add directory="C:/dev_libs/irrlicht-1.8.5/lib/Win32-gcc" />
+					<Add directory="C:/dev_libs/wx/lib/gcc810_x64_dll" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-fexceptions" />
+		</Compiler>
+		<Unit filename="GameEngine/Core/OOS3D_Core.cpp" />
+		<Unit filename="GameEngine/Core/OOS3D_Core.h" />
+		<Unit filename="MainMenu/MainToolbar.cpp" />
+		<Unit filename="MainMenu/ProjectMenu/project_menu.cpp" />
+		<Unit filename="OOS3D_App.cpp" />
+		<Unit filename="OOS3D_App.h" />
+		<Unit filename="OOS3D_Engine.cpp" />
+		<Unit filename="OOS3D_Engine.h" />
+		<Unit filename="OOS3D_Engine_Frame.cpp" />
+		<Unit filename="OOS3D_Engine_Frame.h" />
+		<Unit filename="OOS3D_ImportModelDialog.cpp" />
+		<Unit filename="OOS3D_ImportModelDialog.h" />
+		<Unit filename="OOS3D_Project_Structures.h" />
+		<Unit filename="OOS3D_addActorDialog.cpp" />
+		<Unit filename="OOS3D_addActorDialog.h" />
+		<Unit filename="OOS3D_newProjectDialog.cpp" />
+		<Unit filename="OOS3D_newProjectDialog.h" />
+		<Unit filename="OOS3D_newStageDialog.cpp" />
+		<Unit filename="OOS3D_newStageDialog.h" />
+		<Unit filename="wxIrrlicht.cpp" />
+		<Unit filename="wxIrrlicht.h" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

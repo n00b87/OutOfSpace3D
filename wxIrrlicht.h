@@ -35,12 +35,13 @@
 #include <windows.h>
 #include <irrlicht.h>
 #include <wx/wx.h>
+#include <wx/toolbar.h>
 
 class wxIrrlicht : public wxControl {
 	public:
 		wxIrrlicht(wxWindow* parent, wxWindowID id, bool bs=true, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxTAB_TRAVERSAL, const wxString& name = wxPanelNameStr);
 		~wxIrrlicht();
-		
+
         void InitIrr(irr::SIrrlichtCreationParameters* init_params = 0);
         void StartRendering(int milliseconds = 10);
         void StopRendering();
@@ -55,6 +56,18 @@ class wxIrrlicht : public wxControl {
         irr::scene::ISceneManager* GetSceneManager() const { return m_pSceneManager; }
         irr::scene::ICameraSceneNode* GetCameraNode() const { return m_pCameraNode; }
         irr::gui::IGUIEnvironment* GetGuiEnvironment() const { return m_pGuiEnvironment; }
+
+        //OOS3D custom crap
+        wxToolBarToolBase* m_view_tool;
+		wxToolBarToolBase* m_select_tool;
+		wxToolBarToolBase* m_boxSelect_tool;
+		wxToolBarToolBase* m_move_tool;
+		wxToolBarToolBase* m_rotate_tool;
+		wxToolBarToolBase* m_scale_tool;
+		irr::video::ITexture* view_stage_tool_texture;
+
+        int getMainToolToggleState();
+        void drawOverlay();
 
 	protected:
         void OnPaint(wxPaintEvent& event);
@@ -76,10 +89,10 @@ class wxIrrlicht : public wxControl {
 		enum {
 			ID_IRR_TIMER=1000
 		};
-		        
+
     private:
 		DECLARE_EVENT_TABLE();
-        
+
 };//wxIrrlicht
 
 #endif

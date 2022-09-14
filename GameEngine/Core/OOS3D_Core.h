@@ -87,11 +87,16 @@ struct OOS3D_Script
 
 struct OOS3D_Actor
 {
+    std::string actor_name;
+
     int id;
 
     path actor_file;
 
     IAnimatedMeshSceneNode* node;
+
+    int texture;
+	bool use_ext_texture;
 
 	vector3df init_pos;
 	vector3df init_rot;
@@ -103,7 +108,9 @@ struct OOS3D_Actor
 
 	bool init_pos_on_reload;
 
-	OOS3D_Mesh* actor_mesh;
+	int mesh_id; //index for now
+
+	IAnimatedMesh* mesh;
 
 	bool active_flag;
 
@@ -235,23 +242,15 @@ struct OOS3D_Game
 OOS3D_Game game;
 
 //returns vector index
-int OOS3D_LoadMesh(IrrlichtDevice* device, path mesh_file, int texture_index=-1)
+int OOS3D_LoadMesh(IrrlichtDevice* device, path mesh_file)
 {
     ISceneManager* smgr = device->getSceneManager();
     OOS3D_Mesh mesh;
     mesh.mesh_file = mesh_file;
     mesh.node = smgr->getMesh(mesh_file);
 
-    if(texture_index >= 0)
-    {
-        mesh.mesh_texture = texture_index;
-
-        //Apply these to actor
-        //mesh.node->setMaterialFlag(EMF_LIGHTING, false);
-        //mesh.node->setMaterialTexture( 0, game.texture[texture_index].texture );
-
-        mesh.use_ext_texture = true;
-    }
+    if(!mesh.node)
+        return -1;
 
     int vector_index = game.mesh.size();
     game.mesh.push_back(mesh);
@@ -259,10 +258,18 @@ int OOS3D_LoadMesh(IrrlichtDevice* device, path mesh_file, int texture_index=-1)
     return vector_index;
 }
 
-
-OOS3D_Window* OOS3D_WindowOpenEx(std::string game_name, SIrrlichtCreationParameters param);
-
-
+int OOS3D_AddActor(IrrlichtDevice* device, int stage_index, std::string actor_name, int mesh_index)
+{
+    ISceneManager* smgr = device->getSceneManager();
+    OOS3D_Actor actor;
+    actor.mesh_id = mesh_index;
+    IAnimatedMesh* mesh = game.mesh[mesh_index].node;
+    actor.mesh = mesh;
+    actor.node = smgr->addAnimatedMeshSceneNode( mesh );
+    int actor_index = game.stage[stage_index].actors.size();
+    game.stage[stage_index].actors.push_back(actor);
+    return actor_index;
+}
 
 
 int OOS3D_StartStage(IrrlichtDevice* device, OOS3D_Stage* stage)
@@ -295,7 +302,7 @@ int OOS3D_StartStage(IrrlichtDevice* device, OOS3D_Stage* stage)
     {
         OOS3D_Actor* actor = &stage->actors[actor_index];
 
-        actor->node = smgr->addAnimatedMeshSceneNode( actor->actor_mesh->node );
+        actor->node = smgr->addAnimatedMeshSceneNode( actor->mesh );
     }
 
     return 0;

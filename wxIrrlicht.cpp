@@ -1,4 +1,5 @@
 #include <wx/wx.h>
+#include <wx/toolbar.h>
 #include <windows.h>
 #include <irrlicht.h>
 #include "wxIrrlicht.h"
@@ -40,6 +41,8 @@ wxIrrlicht::~wxIrrlicht() {
 void wxIrrlicht::InitIrr(irr::SIrrlichtCreationParameters* init_params) {
     SIrrlichtCreationParameters params;
     params.DriverType = EDT_OPENGL;
+
+    view_stage_tool_texture = NULL;
 
     SIrrlichtCreationParameters* actual_params = init_params ? init_params : &params;
     dimension2d<u32> irrSize(GetClientSize().GetX(), GetClientSize().GetY());
@@ -110,6 +113,7 @@ void wxIrrlicht::OnRender() {
     m_pDriver->beginScene(true, true, SColor(0,255,255,255));
     m_pSceneManager->drawAll();
     m_pGuiEnvironment->drawAll();
+    drawOverlay();
     m_pDriver->endScene();
 }//OnRender()
 
@@ -162,7 +166,10 @@ void wxIrrlicht::OnMouse(wxMouseEvent& event) {
 
     if (event.IsButton()) {
         if (event.LeftDown())
+        {
             sevt.MouseInput.Event = irr::EMIE_LMOUSE_PRESSED_DOWN;
+            wxMessageBox(_("Mouse Button Pressed"));
+        }
         else if (event.LeftUp())
             sevt.MouseInput.Event = irr::EMIE_LMOUSE_LEFT_UP;
         else if (event.MiddleDown())
@@ -223,8 +230,39 @@ void wxIrrlicht::OnKey(wxKeyEvent& event) {
 
 
 
+//OOS3D stuff
+#define MAIN_TOOL_TOGGLE_VIEW 1
+#define MAIN_TOOL_TOGGLE_SINGLE_SELECT 2
+#define MAIN_TOOL_TOGGLE_BOX_SELECT 3
+#define MAIN_TOOL_TOGGLE_ACTOR_MOVE 4
+#define MAIN_TOOL_TOGGLE_ACTOR_ROTATE 5
+#define MAIN_TOOL_TOGGLE_ACTOR_SCALE 6
 
-/* CODE DUMP
-	: wxWindow(parent, id, pos, size, style, name)
+int wxIrrlicht::getMainToolToggleState()
+{
+    if(m_view_tool->IsToggled())
+        return MAIN_TOOL_TOGGLE_VIEW;
 
-*/
+    if(m_select_tool->IsToggled())
+        return MAIN_TOOL_TOGGLE_SINGLE_SELECT;
+
+    if(m_boxSelect_tool->IsToggled())
+        return MAIN_TOOL_TOGGLE_BOX_SELECT;
+
+    if(m_move_tool->IsToggled())
+        return MAIN_TOOL_TOGGLE_ACTOR_MOVE;
+
+    if(m_rotate_tool->IsToggled())
+        return MAIN_TOOL_TOGGLE_ACTOR_ROTATE;
+
+    if(m_scale_tool->IsToggled())
+        return MAIN_TOOL_TOGGLE_ACTOR_SCALE;
+
+    return 0;
+}
+
+void wxIrrlicht::drawOverlay()
+{
+    if(getMainToolToggleState()==MAIN_TOOL_TOGGLE_VIEW && view_stage_tool_texture != NULL)
+        m_pDriver->draw2DImage(view_stage_tool_texture, position2d<s32>(100, 100));
+}

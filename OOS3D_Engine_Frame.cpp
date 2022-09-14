@@ -5,6 +5,7 @@
 #include "OOS3D_Engine_Frame.h"
 #include "OOS3D_newProjectDialog.h"
 #include "GameEngine/Core/OOS3D_Core.h"
+#include "OOS3D_Project_Structures.h"
 
 OOS3D_Engine_Frame::OOS3D_Engine_Frame( wxWindow* parent )
 :
@@ -12,6 +13,7 @@ OOS3D_Engine( parent )
 {
     app_path = wxStandardPaths::Get().GetExecutablePath();
     game_project = NULL;
+    project_node_settings = NULL;
 
     wxFileName gfx_path = app_path;
     gfx_path.AppendDir(_("gfx"));
@@ -188,6 +190,8 @@ void OOS3D_Engine_Frame::OnNewProjectMenuSelect( wxCommandEvent& event )
 
     SetupProjectTree();
 
+    project_node_settings = new OOS3D_Project_Node_Settings(m_node_propertyGrid, game_project);
+
 }
 
 void OOS3D_Engine_Frame::OnLoadProjectMenuSelect( wxCommandEvent& event )
@@ -231,6 +235,11 @@ void OOS3D_Engine_Frame::SetupProjectTree()
         OOS3D_Project_Stage stage = game_project->stages[stage_index];
 
         stage.stage_treeItem = m_project_treeCtrl->AppendItem(game_project->project_root, stage.name, project_tree_folderImage);
+
+        //OOS3D_Project_treeItemData* old_data = (OOS3D_Project_treeItemData*)m_project_treeCtrl->GetItemData(stage.stage_treeItem);
+        m_project_treeCtrl->SetItemData(stage.stage_treeItem, NULL);
+        OOS3D_Project_treeItemData* stage_treeItem_data = new OOS3D_Project_treeItemData(stage_index, stage_index);
+        m_project_treeCtrl->SetItemData(stage.stage_treeItem, stage_treeItem_data);
 
         stage.terrain_treeItem = m_project_treeCtrl->AppendItem(stage.stage_treeItem, _("Terrain"), project_tree_folderImage);
         for(int terrain_index = 0; terrain_index < stage.terrain.size(); terrain_index++)
@@ -312,4 +321,233 @@ void OOS3D_Engine_Frame::SetupProjectTree()
 
     m_stage_auinotebook->AddPage(game_project->stages[0].render_panel, game_project->stages[0].name, true);
     */
+}
+
+void OOS3D_Engine_Frame::OpenStageTab(int stage_n)
+{
+    game_project->stages[stage_n].render_panel = new wxIrrlicht(m_stage_auinotebook, wxID_ANY, false, wxPoint(ClientW(2), ClientH(2)), wxSize(ClientW(64), ClientH(36)));
+
+    //game_project->stages[stage_n].stage_events = new StageEventReceiver();
+
+    game_project->stages[stage_n].render_panel->m_view_tool = m_view_tool;
+    game_project->stages[stage_n].render_panel->m_select_tool = m_select_tool;
+    game_project->stages[stage_n].render_panel->m_boxSelect_tool = m_boxSelect_tool;
+    game_project->stages[stage_n].render_panel->m_move_tool = m_move_tool;
+    game_project->stages[stage_n].render_panel->m_rotate_tool = m_rotate_tool;
+    game_project->stages[stage_n].render_panel->m_scale_tool = m_scale_tool;
+
+    //game_project->stages[stage_n].render_panel->GetDevice()->setEventReceiver( game_project->stages[stage_n].stage_events );
+
+    //game_project->stages[stage_n].render_panel->SetBackgroundColour(wxColour("red"));
+
+    game_project->stages[stage_n].render_panel->InitIrr();
+    game_project->stages[stage_n].render_panel->StartRendering();
+
+    //Setup Test Scene
+    irr::scene::ISceneManager* smgr = game_project->stages[stage_n].render_panel->GetDevice()->getSceneManager();
+    video::IVideoDriver* driver = game_project->stages[stage_n].render_panel->GetDevice()->getVideoDriver();
+
+    wxFileName asset_path(app_path);
+    asset_path.AppendDir(_("AssetLibrary"));
+
+    wxFileName gfx_path(app_path);
+    gfx_path.AppendDir(_("gfx"));
+
+    wxFileName view_tool_gfx_path = gfx_path;
+    view_tool_gfx_path.SetFullName(_("view_stage_tool.png"));
+    game_project->stages[stage_n].view_tool_overlay = driver->getTexture((path)view_tool_gfx_path.GetFullPath().ToStdString().c_str());
+    game_project->stages[stage_n].render_panel->view_stage_tool_texture = game_project->stages[stage_n].view_tool_overlay;
+
+    //load meshes
+    for(int i = 0; i < game_project->stages[stage_n].models.size(); i++)
+    {
+        int mesh_index = game_project->stages[stage_n].models[i].project_model_index;
+        if(mesh_index >= 0 && mesh_index < game_project->Models.size())
+        {
+            wxString fname = game_project->Models[mesh_index].fname;
+            wxFileName mesh_path = asset_path;
+            mesh_path.AppendDir(_("Mesh"));
+            mesh_path.SetFullName(fname);
+            game_project->stages[stage_n].models[i].mesh = smgr->getMesh((path)mesh_path.GetFullPath().ToStdString().c_str());
+        }
+    }
+
+    //wxMessageBox(_("Stage opened so far"));
+
+
+    //load actors
+    for(int i = 0; i < game_project->stages[stage_n].actors.size(); i++)
+    {
+        int mesh_index = game_project->stages[stage_n].actors[i].stage_mesh_index;
+        IAnimatedMesh* mesh = game_project->stages[stage_n].models[mesh_index].mesh;
+
+        game_project->stages[stage_n].actors[i].node = smgr->addAnimatedMeshSceneNode( mesh );
+
+        IAnimatedMeshSceneNode* node = game_project->stages[stage_n].actors[i].node;
+
+        if (node)
+        {
+            node->setMaterialFlag(EMF_LIGHTING, false); //change this to true in game for lighting
+            //node->setMD2Animation(scene::EMAT_STAND);
+
+            int texture_index = game_project->stages[stage_n].actors[i].texture_index;
+
+            if(texture_index >= 0 && texture_index < game_project->Textures.size())
+            {
+                wxFileName texture_path = asset_path;
+                texture_path.AppendDir(_("Texture"));
+                texture_path.SetFullName(game_project->Textures[texture_index].fname);
+                node->setMaterialTexture( 0, driver->getTexture((path)texture_path.GetFullPath().ToStdString().c_str()) );
+            }
+        }
+    }
+
+
+
+    game_project->stages[stage_n].stage_camera = smgr->addCameraSceneNode(0, vector3df(0,30,-40), vector3df(0,5,0)); //using this default camera for now
+
+    m_stage_auinotebook->AddPage(game_project->stages[stage_n].render_panel, game_project->stages[stage_n].name, true);
+
+
+
+}
+
+void OOS3D_Engine_Frame::OnStageTabClosed( wxAuiNotebookEvent& event )
+{
+    wxIrrlicht* current_stage_panel = (wxIrrlicht*) m_stage_auinotebook->GetPage(event.GetSelection());
+    for(int i = 0; i < game_project->stages.size(); i++)
+    {
+        if(current_stage_panel == game_project->stages[i].render_panel)
+        {
+            game_project->stages[i].render_panel->GetDevice()->drop();
+            game_project->stages[i].render_panel = NULL;
+
+            for(int n = 0; n < game_project->stages[i].models.size(); n++)
+            {
+                game_project->stages[i].models[n].mesh = NULL;
+            }
+
+            for(int n = 0; n < game_project->stages[i].actors.size(); n++)
+            {
+                game_project->stages[i].actors[n].node = NULL;
+            }
+            break;
+        }
+    }
+}
+
+void OOS3D_Engine_Frame::OnProjectTreeItemActivated( wxTreeEvent& event )
+{
+    OOS3D_Project_treeItemData* item_data = (OOS3D_Project_treeItemData*)m_project_treeCtrl->GetItemData(event.GetItem());
+    if(!item_data)
+        return;
+
+    current_stage_index = item_data->project_stage_index;
+
+    OpenStageTab(current_stage_index);
+
+    //wxMessageBox(_("Stage set to ") + wxString::Format(_("%i"), current_stage_index));
+}
+
+void OOS3D_Engine_Frame::OnProjectTreeItemSelected( wxTreeEvent& event )
+{
+    OOS3D_Project_treeItemData* item_data = (OOS3D_Project_treeItemData*)m_project_treeCtrl->GetItemData(event.GetItem());
+
+    if(!item_data)
+        return;
+
+    int stage_index = item_data->project_stage_index;
+
+    project_node_settings->setStage(stage_index);
+    project_node_settings->setNode(-1, -1);
+
+    switch(item_data->node_type)
+    {
+        case PROJECT_NODE_TYPE_ACTOR:
+            project_node_settings->setNode(PROJECT_NODE_TYPE_ACTOR, item_data->node_index);
+            break;
+    }
+
+    project_node_settings->displaySettings();
+}
+
+
+void OOS3D_Engine_Frame::OnNodePropertyChanged( wxPropertyGridEvent& event )
+{
+    project_node_settings->updateNodeObject();
+    int stage_index = project_node_settings->stage_index;
+    int node_index = project_node_settings->node_index;
+
+    irr::scene::ISceneManager* smgr = game_project->stages[stage_index].render_panel->GetDevice()->getSceneManager();
+    video::IVideoDriver* driver = game_project->stages[stage_index].render_panel->GetDevice()->getVideoDriver();
+
+    wxFileName asset_path(app_path);
+    asset_path.AppendDir(_("AssetLibrary"));
+
+    bool refresh_flag = false;
+    int page_n = -1;
+
+    for(int i = 0; i < m_stage_auinotebook->GetPageCount(); i++)
+    {
+        if(game_project->stages[stage_index].render_panel == (wxIrrlicht*)m_stage_auinotebook->GetPage(i))
+        {
+            page_n = i;
+            refresh_flag = true;
+        }
+    }
+
+    switch(project_node_settings->node_type)
+    {
+        case PROJECT_NODE_TYPE_ACTOR:
+            if(game_project->stages[stage_index].actors[node_index].node)
+            {
+                game_project->stages[stage_index].actors[node_index].node->remove();
+                game_project->stages[stage_index].actors[node_index].node = NULL;
+            }
+
+            if(refresh_flag)
+            {
+
+                int mesh_index = game_project->stages[stage_index].actors[node_index].stage_mesh_index;
+
+                if(!game_project->stages[stage_index].models[mesh_index].mesh)
+                {
+                    int project_mesh_index = game_project->stages[stage_index].models[mesh_index].project_model_index;
+                    wxString fname = game_project->Models[project_mesh_index].fname;
+                    wxFileName mesh_path = asset_path;
+                    mesh_path.AppendDir(_("Mesh"));
+                    mesh_path.SetFullName(fname);
+                    if(mesh_path.FileExists())
+                    {
+                        game_project->stages[stage_index].models[mesh_index].mesh = smgr->getMesh((path)mesh_path.GetFullPath().ToStdString().c_str());
+                    }
+                }
+
+
+                mesh_index = game_project->stages[stage_index].actors[node_index].stage_mesh_index;
+
+                IAnimatedMesh* mesh = game_project->stages[stage_index].models[mesh_index].mesh;
+
+                game_project->stages[stage_index].actors[node_index].node = smgr->addAnimatedMeshSceneNode( mesh );
+
+                IAnimatedMeshSceneNode* node = game_project->stages[stage_index].actors[node_index].node;
+
+                if (node)
+                {
+                    node->setMaterialFlag(EMF_LIGHTING, false); //change this to true in game for lighting
+                    //node->setMD2Animation(scene::EMAT_STAND);
+
+                    int texture_index = game_project->stages[stage_index].actors[node_index].texture_index;
+
+                    if(texture_index >= 0 && texture_index < game_project->Textures.size())
+                    {
+                        wxFileName texture_path = asset_path;
+                        texture_path.AppendDir(_("Texture"));
+                        texture_path.SetFullName(game_project->Textures[texture_index].fname);
+                        node->setMaterialTexture( 0, driver->getTexture((path)texture_path.GetFullPath().ToStdString().c_str()) );
+                    }
+                }
+            }
+            break;
+    }
 }

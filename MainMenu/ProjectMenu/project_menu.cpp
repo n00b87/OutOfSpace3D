@@ -28,6 +28,9 @@ void OOS3D_Engine_Frame::CreateStage(wxString stage_name, int stage_type)
 
 
     stage.stage_treeItem = m_project_treeCtrl->AppendItem(game_project->project_root, stage.name, project_tree_folderImage);
+    OOS3D_Project_treeItemData* stage_treeItem_data = new OOS3D_Project_treeItemData((int)game_project->stages.size(), (int)game_project->stages.size());
+    stage_treeItem_data->node_type = PROJECT_NODE_TYPE_STAGE;
+    m_project_treeCtrl->SetItemData(stage.stage_treeItem, stage_treeItem_data);
 
     stage.terrain_treeItem = m_project_treeCtrl->AppendItem(stage.stage_treeItem, _("Terrain"), project_tree_folderImage);
     stage.actors_treeItem = m_project_treeCtrl->AppendItem(stage.stage_treeItem, _("Actors"), project_tree_folderImage);
@@ -54,6 +57,35 @@ void OOS3D_Engine_Frame::OnNewStageMenuSelect( wxCommandEvent& event )
 
     CreateStage(newStage_dlg.stage_name, newStage_dlg.stage_type);
 
+
+    /*
+    game_project->stages[0].render_panel = new wxIrrlicht(m_stage_auinotebook, wxID_ANY, false, wxPoint(ClientW(2), ClientH(2)), wxSize(ClientW(64), ClientH(36)));
+
+    game_project->stages[0].render_panel->SetBackgroundColour(wxColour("red"));
+    game_project->stages[0].render_panel->InitIrr();
+    game_project->stages[0].render_panel->StartRendering();
+
+    //Setup Test Scene
+    irr::scene::ISceneManager* smgr = game_project->stages[0].render_panel->GetDevice()->getSceneManager();
+    video::IVideoDriver* driver = game_project->stages[0].render_panel->GetDevice()->getVideoDriver();
+
+    IAnimatedMesh* mesh = smgr->getMesh("gfx/media/sydney.md2");
+
+    IAnimatedMeshSceneNode* node = smgr->addAnimatedMeshSceneNode( mesh );
+
+    if (node)
+    {
+        node->setMaterialFlag(EMF_LIGHTING, false);
+        node->setMD2Animation(scene::EMAT_STAND);
+        node->setMaterialTexture( 0, driver->getTexture("gfx/media/sydney.bmp") );
+    }
+
+    smgr->addCameraSceneNode(0, vector3df(0,30,-40), vector3df(0,5,0));
+    //----
+
+    m_stage_auinotebook->AddPage(game_project->stages[0].render_panel, game_project->stages[0].name, true);
+    */
+
 }
 
 void OOS3D_Engine_Frame::ImportModel(wxFileName fname, bool animation_flag, bool textue_flag, bool armature_flag, bool scene_flag)
@@ -63,8 +95,21 @@ void OOS3D_Engine_Frame::ImportModel(wxFileName fname, bool animation_flag, bool
     mesh_path.AppendDir(_("Mesh"));
     mesh_path.SetFullName(fname.GetFullName());
 
+    if(fname.Exists() && wxFileName(mesh_path.GetPath()).Exists())
+    {
+        //wxMessageBox(_("Copying file over"));
+        wxCopyFile(fname.GetFullPath(), mesh_path.GetFullPath());
+    }
+    else
+    {
+        wxMessageBox(_("Mesh does not exists"));
+    }
+
     OOS3D_Project_Mesh mesh;
-    mesh.fname = _("AssetLibrary/Mesh/") + fname.GetFullName();
+    mesh.index = game_project->Models.size();
+
+    //mesh.fname = _("AssetLibrary/Mesh/") + fname.GetFullName();
+    mesh.fname = fname.GetFullName();
     mesh.id = game_project->id_counter;
     game_project->id_counter++;
 

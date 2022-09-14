@@ -45,12 +45,17 @@ class OOS3D_Engine_Frame : public OOS3D_Engine
 		//void OnRotateToolSelect( wxCommandEvent& event );
 		//void OnScaleToolSelect( wxCommandEvent& event );
 		//void OnSetTerrainToolSelect( wxCommandEvent& event );
-		//void OnAddActorToolSelect( wxCommandEvent& event );
+		void OnAddActorToolSelect( wxCommandEvent& event );
 		//void OnAddLightToolSelect( wxCommandEvent& event );
 		//void OnAddCameraToolSelect( wxCommandEvent& event );
 		//void OnAddEffectToolSelect( wxCommandEvent& event );
 		//void OnAddEventToolSelect( wxCommandEvent& event );
 		//void OnProjectTreeContextMenu( wxTreeEvent& event );
+		//void OnStageTabChanged( wxAuiNotebookEvent& event );  //will need to select stage on project tree
+		void OnProjectTreeItemActivated( wxTreeEvent& event );
+		void OnProjectTreeItemSelected( wxTreeEvent& event );
+		void OnNodePropertyChanged( wxPropertyGridEvent& event );
+		void OnStageTabClosed( wxAuiNotebookEvent& event );
 
 	public:
 		/** Constructor */
@@ -59,6 +64,7 @@ class OOS3D_Engine_Frame : public OOS3D_Engine
 		void SetupProjectTree();
 
 		OOS3D_Project* game_project;
+		OOS3D_Project_Node_Settings* project_node_settings;
 
 		//NewProject
 		void CreateProject(wxString project_name);
@@ -67,7 +73,11 @@ class OOS3D_Engine_Frame : public OOS3D_Engine
 		void SetupTestProject();
 
 		//NewStage
+		int current_stage_index = 0;
 		void CreateStage(wxString stage_name, int stage_type);
+
+		//Open Stage
+		void OpenStageTab(int stage_n);
 
 		//Import 3D Model
 		void ImportModel(wxFileName fname, bool animation_flag, bool texture_flag, bool armature_flag, bool scene_flag);

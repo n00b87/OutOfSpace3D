@@ -22,7 +22,8 @@
 #include <wx/treectrl.h>
 #include <wx/sizer.h>
 #include <wx/panel.h>
-#include <wx/treelist.h>
+#include <wx/propgrid/propgrid.h>
+#include <wx/propgrid/advprops.h>
 #include <wx/splitter.h>
 #include <wx/notebook.h>
 #include <wx/aui/auibook.h>
@@ -79,7 +80,7 @@ class OOS3D_Engine : public wxFrame
 		wxPanel* m_panel14;
 		wxTreeCtrl* m_project_treeCtrl;
 		wxPanel* m_panel15;
-		wxTreeListCtrl* m_projectProperties_treeListCtrl;
+		wxPropertyGrid* m_node_propertyGrid;
 		wxPanel* m_assetBrowser_panel;
 		wxTreeCtrl* m_assets_treeCtrl;
 		wxPanel* m_stageNotebookContainer_panel;
@@ -122,7 +123,12 @@ class OOS3D_Engine : public wxFrame
 		virtual void OnAddCameraToolSelect( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAddEffectToolSelect( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAddEventToolSelect( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnProjectTreeItemActivated( wxTreeEvent& event ) { event.Skip(); }
 		virtual void OnProjectTreeContextMenu( wxTreeEvent& event ) { event.Skip(); }
+		virtual void OnProjectTreeItemSelected( wxTreeEvent& event ) { event.Skip(); }
+		virtual void OnNodePropertyChanged( wxPropertyGridEvent& event ) { event.Skip(); }
+		virtual void OnStageTabChanged( wxAuiNotebookEvent& event ) { event.Skip(); }
+		virtual void OnStageTabClosed( wxAuiNotebookEvent& event ) { event.Skip(); }
 
 
 	public:
@@ -133,7 +139,7 @@ class OOS3D_Engine : public wxFrame
 
 		void m_splitter2OnIdle( wxIdleEvent& )
 		{
-			m_splitter2->SetSashPosition( 177 );
+			m_splitter2->SetSashPosition( 214 );
 			m_splitter2->Disconnect( wxEVT_IDLE, wxIdleEventHandler( OOS3D_Engine::m_splitter2OnIdle ), NULL, this );
 		}
 
@@ -252,6 +258,38 @@ class importModelDialog : public wxDialog
 		importModelDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Import 3D Mesh"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 436,274 ), long style = wxDEFAULT_DIALOG_STYLE );
 
 		~importModelDialog();
+
+};
+
+///////////////////////////////////////////////////////////////////////////////
+/// Class addActorDialog
+///////////////////////////////////////////////////////////////////////////////
+class addActorDialog : public wxDialog
+{
+	private:
+
+	protected:
+		wxStaticText* m_staticText6;
+		wxTextCtrl* m_actorID_textCtrl;
+		wxStaticText* m_staticText61;
+		wxComboBox* m_models_comboBox;
+		wxStaticText* m_staticText611;
+		wxComboBox* m_hitBox_comboBox;
+		wxStaticText* m_staticText62;
+		wxComboBox* m_textures_comboBox;
+		wxButton* m_cancel_button;
+		wxButton* m_addActor_button;
+
+		// Virtual event handlers, override them in your derived class
+		virtual void OnCancelButtonClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnAddActorButtonClick( wxCommandEvent& event ) { event.Skip(); }
+
+
+	public:
+
+		addActorDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Add Actor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 520,239 ), long style = wxDEFAULT_DIALOG_STYLE );
+
+		~addActorDialog();
 
 };
 

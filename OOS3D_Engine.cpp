@@ -216,9 +216,8 @@ OOS3D_Engine::OOS3D_Engine( wxWindow* parent, wxWindowID id, const wxString& tit
 	wxBoxSizer* bSizer15;
 	bSizer15 = new wxBoxSizer( wxVERTICAL );
 
-	m_projectProperties_treeListCtrl = new wxTreeListCtrl( m_panel15, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTL_DEFAULT_STYLE );
-
-	bSizer15->Add( m_projectProperties_treeListCtrl, 1, wxEXPAND | wxALL, 5 );
+	m_node_propertyGrid = new wxPropertyGrid(m_panel15, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxPG_DEFAULT_STYLE);
+	bSizer15->Add( m_node_propertyGrid, 1, wxALL|wxEXPAND, 5 );
 
 
 	m_panel15->SetSizer( bSizer15 );
@@ -263,7 +262,7 @@ OOS3D_Engine::OOS3D_Engine( wxWindow* parent, wxWindowID id, const wxString& tit
 	m_stageNotebookContainer_panel->SetSizer( bSizer13 );
 	m_stageNotebookContainer_panel->Layout();
 	bSizer13->Fit( m_stageNotebookContainer_panel );
-	m_splitter2->SplitVertically( m_panel19, m_stageNotebookContainer_panel, 177 );
+	m_splitter2->SplitVertically( m_panel19, m_stageNotebookContainer_panel, 214 );
 	bSizer111->Add( m_splitter2, 1, wxEXPAND, 5 );
 
 
@@ -317,7 +316,12 @@ OOS3D_Engine::OOS3D_Engine( wxWindow* parent, wxWindowID id, const wxString& tit
 	this->Connect( m_addCamera_tool->GetId(), wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( OOS3D_Engine::OnAddCameraToolSelect ) );
 	this->Connect( m_effect_tool->GetId(), wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( OOS3D_Engine::OnAddEffectToolSelect ) );
 	this->Connect( m_event_tool->GetId(), wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( OOS3D_Engine::OnAddEventToolSelect ) );
+	m_project_treeCtrl->Connect( wxEVT_COMMAND_TREE_ITEM_ACTIVATED, wxTreeEventHandler( OOS3D_Engine::OnProjectTreeItemActivated ), NULL, this );
 	m_project_treeCtrl->Connect( wxEVT_COMMAND_TREE_ITEM_MENU, wxTreeEventHandler( OOS3D_Engine::OnProjectTreeContextMenu ), NULL, this );
+	m_project_treeCtrl->Connect( wxEVT_COMMAND_TREE_SEL_CHANGED, wxTreeEventHandler( OOS3D_Engine::OnProjectTreeItemSelected ), NULL, this );
+	m_node_propertyGrid->Connect( wxEVT_PG_CHANGED, wxPropertyGridEventHandler( OOS3D_Engine::OnNodePropertyChanged ), NULL, this );
+	m_stage_auinotebook->Connect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, wxAuiNotebookEventHandler( OOS3D_Engine::OnStageTabChanged ), NULL, this );
+	m_stage_auinotebook->Connect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSE, wxAuiNotebookEventHandler( OOS3D_Engine::OnStageTabClosed ), NULL, this );
 }
 
 OOS3D_Engine::~OOS3D_Engine()
@@ -340,7 +344,12 @@ OOS3D_Engine::~OOS3D_Engine()
 	this->Disconnect( m_addCamera_tool->GetId(), wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( OOS3D_Engine::OnAddCameraToolSelect ) );
 	this->Disconnect( m_effect_tool->GetId(), wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( OOS3D_Engine::OnAddEffectToolSelect ) );
 	this->Disconnect( m_event_tool->GetId(), wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( OOS3D_Engine::OnAddEventToolSelect ) );
+	m_project_treeCtrl->Disconnect( wxEVT_COMMAND_TREE_ITEM_ACTIVATED, wxTreeEventHandler( OOS3D_Engine::OnProjectTreeItemActivated ), NULL, this );
 	m_project_treeCtrl->Disconnect( wxEVT_COMMAND_TREE_ITEM_MENU, wxTreeEventHandler( OOS3D_Engine::OnProjectTreeContextMenu ), NULL, this );
+	m_project_treeCtrl->Disconnect( wxEVT_COMMAND_TREE_SEL_CHANGED, wxTreeEventHandler( OOS3D_Engine::OnProjectTreeItemSelected ), NULL, this );
+	m_node_propertyGrid->Disconnect( wxEVT_PG_CHANGED, wxPropertyGridEventHandler( OOS3D_Engine::OnNodePropertyChanged ), NULL, this );
+	m_stage_auinotebook->Disconnect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, wxAuiNotebookEventHandler( OOS3D_Engine::OnStageTabChanged ), NULL, this );
+	m_stage_auinotebook->Disconnect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSE, wxAuiNotebookEventHandler( OOS3D_Engine::OnStageTabClosed ), NULL, this );
 
 }
 
@@ -687,5 +696,131 @@ importModelDialog::~importModelDialog()
 	// Disconnect Events
 	m_cancel_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( importModelDialog::OnCancelButtonClick ), NULL, this );
 	m_import_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( importModelDialog::OnOKButtonClick ), NULL, this );
+
+}
+
+addActorDialog::addActorDialog( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+{
+	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
+
+	wxBoxSizer* bSizer28;
+	bSizer28 = new wxBoxSizer( wxVERTICAL );
+
+
+	bSizer28->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer29;
+	bSizer29 = new wxBoxSizer( wxHORIZONTAL );
+
+
+	bSizer29->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_staticText6 = new wxStaticText( this, wxID_ANY, wxT("Actor ID"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText6->Wrap( -1 );
+	bSizer29->Add( m_staticText6, 1, wxALL, 5 );
+
+	m_actorID_textCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer29->Add( m_actorID_textCtrl, 12, wxALL, 5 );
+
+
+	bSizer29->Add( 0, 0, 1, wxEXPAND, 5 );
+
+
+	bSizer28->Add( bSizer29, 4, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer291;
+	bSizer291 = new wxBoxSizer( wxHORIZONTAL );
+
+
+	bSizer291->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_staticText61 = new wxStaticText( this, wxID_ANY, wxT("Model"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText61->Wrap( -1 );
+	bSizer291->Add( m_staticText61, 1, wxALL, 5 );
+
+	m_models_comboBox = new wxComboBox( this, wxID_ANY, wxT("Combo!"), wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
+	bSizer291->Add( m_models_comboBox, 12, wxALL, 5 );
+
+
+	bSizer291->Add( 0, 0, 1, wxEXPAND, 5 );
+
+
+	bSizer28->Add( bSizer291, 4, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer2911;
+	bSizer2911 = new wxBoxSizer( wxHORIZONTAL );
+
+
+	bSizer2911->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_staticText611 = new wxStaticText( this, wxID_ANY, wxT("HitBox"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText611->Wrap( -1 );
+	bSizer2911->Add( m_staticText611, 1, wxALL, 5 );
+
+	m_hitBox_comboBox = new wxComboBox( this, wxID_ANY, wxT("Combo!"), wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
+	bSizer2911->Add( m_hitBox_comboBox, 12, wxALL, 5 );
+
+
+	bSizer2911->Add( 0, 0, 1, wxEXPAND, 5 );
+
+
+	bSizer28->Add( bSizer2911, 4, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer292;
+	bSizer292 = new wxBoxSizer( wxHORIZONTAL );
+
+
+	bSizer292->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_staticText62 = new wxStaticText( this, wxID_ANY, wxT("Texture"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText62->Wrap( -1 );
+	bSizer292->Add( m_staticText62, 1, wxALL, 5 );
+
+	m_textures_comboBox = new wxComboBox( this, wxID_ANY, wxT("Combo!"), wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
+	bSizer292->Add( m_textures_comboBox, 12, wxALL, 5 );
+
+
+	bSizer292->Add( 0, 0, 1, wxEXPAND, 5 );
+
+
+	bSizer28->Add( bSizer292, 4, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer34;
+	bSizer34 = new wxBoxSizer( wxVERTICAL );
+
+	wxBoxSizer* bSizer35;
+	bSizer35 = new wxBoxSizer( wxHORIZONTAL );
+
+
+	bSizer35->Add( 0, 0, 2, wxEXPAND, 5 );
+
+	m_cancel_button = new wxButton( this, wxID_ANY, wxT("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer35->Add( m_cancel_button, 1, wxALL|wxEXPAND, 5 );
+
+	m_addActor_button = new wxButton( this, wxID_ANY, wxT("Add Actor"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer35->Add( m_addActor_button, 1, wxALL|wxEXPAND, 5 );
+
+
+	bSizer34->Add( bSizer35, 1, wxEXPAND, 5 );
+
+
+	bSizer28->Add( bSizer34, 1, wxEXPAND, 5 );
+
+
+	this->SetSizer( bSizer28 );
+	this->Layout();
+
+	this->Centre( wxBOTH );
+
+	// Connect Events
+	m_cancel_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( addActorDialog::OnCancelButtonClick ), NULL, this );
+	m_addActor_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( addActorDialog::OnAddActorButtonClick ), NULL, this );
+}
+
+addActorDialog::~addActorDialog()
+{
+	// Disconnect Events
+	m_cancel_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( addActorDialog::OnCancelButtonClick ), NULL, this );
+	m_addActor_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( addActorDialog::OnAddActorButtonClick ), NULL, this );
 
 }
